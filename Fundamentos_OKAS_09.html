@@ -1,0 +1,2817 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutorial - Fundamentos de Programación</title>
+	
+	<!-- Tabler Icons — siempre antes de tu CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  
+  
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --python-blue: #306998; --python-blue-light: #4B8BBE; --python-blue-dark: #265577;
+            --python-yellow: #FFD43B; --python-yellow-light: #FFE873; --python-yellow-dark: #E5BE01;
+            --bg-dark: #1a1a2e; --bg-card: #16213e; --bg-code: #0f0f23;
+            --text-light: #e0e0e0; --text-muted: #a0a0b8;
+            --success: #4caf50; --error: #f44336; --warning: #ff9800;
+            --border-radius: 12px; --shadow: 0 8px 32px rgba(0,0,0,0.3);
+			--color-rojo: red;
+			--color-blanco: white;
+			--color-green: green;
+        }
+		p {
+			text-align: justify;
+		}
+		
+		.text-center { text-align: center; }
+		
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg-dark); color: var(--text-light); line-height: 1.7; min-height: 100vh; }
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: var(--bg-dark); }
+        ::-webkit-scrollbar-thumb { background: var(--python-blue); border-radius: 5px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--python-blue-light); }
+
+        header { background: linear-gradient(135deg, var(--python-blue-dark) 0%, var(--python-blue) 50%, var(--python-yellow-dark) 100%); padding: 40px 20px; text-align: center; position: relative; overflow: hidden; }
+        header::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(255,212,59,0.1) 0%, transparent 60%); animation: pulse 8s ease-in-out infinite; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.1); opacity: 1; } }
+        .logo-container { display: inline-flex; align-items: center; gap: 15px; margin-bottom: 20px; position: relative; z-index: 1; }
+        .python-logo-svg { width: 100px; height: 100px; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.3)); }
+        header h1 { font-size: 2.5em; font-weight: 800; color: #fff; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); position: relative; z-index: 1; }
+        header h1 span.blue { color: var(--python-yellow); }
+        header h1 span.yellow { color: var(--python-blue-light); }
+        header p { font-size: 1.2em; color: rgba(255,255,255,0.85); margin-top: 10px; position: relative; z-index: 1; }
+
+        nav { background: var(--bg-card); padding: 15px 20px; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 20px rgba(0,0,0,0.4); border-bottom: 2px solid var(--python-blue); }
+        .nav-container { max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; justify-content: center; }
+        .nav-btn { background: transparent; color: var(--text-light); border: 1px solid rgba(48,105,152,0.4); padding: 7px 13px; border-radius: 25px; cursor: pointer; font-size: 0.8em; transition: all 0.3s ease; white-space: nowrap; }
+        .nav-btn:hover, .nav-btn.active { background: var(--python-blue); border-color: var(--python-yellow); color: var(--python-yellow); transform: translateY(-2px); box-shadow: 0 4px 15px rgba(48,105,152,0.4); }
+        .progress-bar { width: 100%; max-width: 1200px; margin: 10px auto 0; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--python-blue), var(--python-yellow)); width: 0%; transition: width 0.5s ease; border-radius: 2px; }
+        .progress-text { text-align: center; font-size: 0.75em; color: var(--text-muted); margin-top: 4px; }
+
+        main { max-width: 900px; margin: 0 auto; padding: 30px 20px 60px; }
+        .section { display: none; animation: fadeIn 0.5s ease; }
+        .section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .section-title { font-size: 2em; font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; }
+        .section-title .icon { width: 45px; height: 45px; background: linear-gradient(135deg, var(--python-blue), var(--python-yellow)); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3em; flex-shrink: 0; }
+        .section-subtitle { color: var(--text-muted); font-size: 1.1em; margin-bottom: 30px; padding-left: 57px; }
+
+        .card { background: var(--bg-card); border-radius: var(--border-radius); padding: 25px; margin-bottom: 25px; box-shadow: var(--shadow); border: 1px solid rgba(48,105,152,0.2); transition: transform 0.3s ease, border-color 0.3s ease; }
+        .card:hover { border-color: rgba(255,212,59,0.3); }
+        .card h3 { color: var(--python-yellow); font-size: 1.3em; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+		.card h3.sub{ color: var(--python-blue); font-size: 1.3em; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+        .card p, .card li { color: var(--text-muted); margin-bottom: 8px; }
+        .card ul { padding-left: 20px; }
+        .card ul li { margin-bottom: 5px; }
+        .highlight { color: var(--python-yellow); font-weight: 600; }
+		.warning { color: var(--color-rojo); font-weight: 600; }
+		.numpy { color: rgb(77, 119, 207); font-weight: 600; }
+
+        .code-block { background: var(--bg-code); border-radius: 10px; margin: 15px 0; overflow: hidden; border: 1px solid rgba(48,105,152,0.3); }
+        .code-header { background: rgba(48,105,152,0.3); padding: 8px 15px; display: flex; justify-content: space-between; align-items: center; }
+        .code-header span { font-size: 0.8em; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+        .code-dots { display: flex; gap: 6px; }
+        .code-dots span { width: 12px; height: 12px; border-radius: 50%; }
+        .code-dots span:nth-child(1) { background: #ff5f56; }
+        .code-dots span:nth-child(2) { background: #ffbd2e; }
+        .code-dots span:nth-child(3) { background: #27c93f; }
+        .code-body { padding: 15px 20px; overflow-x: auto; }
+        .code-body pre { margin: 0; font-family: 'Consolas', 'Monaco', 'Courier New', monospace; font-size: 0.9em; line-height: 1.8; }
+        .kw { color: #c792ea; font-weight: bold; }
+        .fn { color: #82aaff; }
+        .st { color: #c3e88d; }
+        .cm { color: #546e7a; font-style: italic; }
+        .nb { color: #89ddff; }
+        .num { color: #f78c6c; }
+        .op { color: #89ddff; }
+        .var { color: #ffcb6b; }
+        .bool { color: #ff5370; font-weight: bold; }
+        .indent { display: inline-block; width: 4ch; }
+
+        .output-block { background: rgba(76,175,80,0.1); border: 1px solid rgba(76,175,80,0.3); border-radius: 8px; padding: 12px 18px; margin-top: 10px; font-family: 'Consolas', monospace; font-size: 0.9em; color: var(--success); }
+        .output-block .output-label { font-size: 0.75em; color: var(--success); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; font-weight: 600; }
+
+        .demo-container { background: linear-gradient(135deg, rgba(48,105,152,0.15), rgba(255,212,59,0.05)); border: 2px solid var(--python-blue); border-radius: var(--border-radius); padding: 25px; margin: 25px 0; }
+        .demo-title { color: var(--python-yellow); font-size: 1.1em; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+        .demo-input-group { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 15px; }
+        .demo-input-group label { font-size: 0.9em; color: var(--text-muted); min-width: 120px; }
+        .demo-input { background: var(--bg-code); border: 1px solid rgba(48,105,152,0.4); color: var(--text-light); padding: 10px 15px; border-radius: 8px; font-size: 0.95em; font-family: 'Consolas', monospace; outline: none; transition: border-color 0.3s; min-width: 150px; }
+        .demo-input:focus { border-color: var(--python-yellow); box-shadow: 0 0 10px rgba(255,212,59,0.2); }
+        .demo-select { background: var(--bg-code); border: 1px solid rgba(48,105,152,0.4); color: var(--text-light); padding: 10px 15px; border-radius: 8px; font-size: 0.95em; outline: none; cursor: pointer; min-width: 150px; }
+        .demo-select:focus { border-color: var(--python-yellow); }
+        .demo-select option { background: var(--bg-code); color: var(--text-light); }
+        .run-btn { background: linear-gradient(135deg, var(--python-blue), var(--python-blue-light)); color: #fff; border: none; padding: 10px 25px; border-radius: 8px; cursor: pointer; font-size: 0.95em; font-weight: 600; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 8px; }
+        .run-btn:hover { background: linear-gradient(135deg, var(--python-yellow-dark), var(--python-yellow)); color: var(--bg-dark); transform: translateY(-2px); box-shadow: 0 4px 15px rgba(255,212,59,0.3); }
+        .demo-output { background: var(--bg-code); border-radius: 8px; padding: 15px; margin-top: 15px; font-family: 'Consolas', monospace; font-size: 0.9em; min-height: 50px; border: 1px solid rgba(48,105,152,0.2); white-space: pre-wrap; transition: border-color 0.3s; }
+        .demo-output.has-output { border-color: var(--python-yellow); }
+
+        /* QUIZ — nuevo diseño */
+        .quiz-card { background: var(--bg-card); border: 1px solid rgba(48,105,152,0.3); border-radius: 14px; padding: 24px; margin-top: 20px; }
+        .quiz-q { font-size: 1rem; font-weight: 600; color: var(--text-light); margin-bottom: 16px; line-height: 1.5; }
+        .quiz-options { display: grid; gap: 10px; }
+        .quiz-opt { background: rgba(48,105,152,0.1); border: 2px solid rgba(48,105,152,0.3); border-radius: 10px; padding: 12px 16px; cursor: pointer; font-family: 'Consolas', 'Monaco', monospace; font-size: 0.88rem; color: var(--text-light); text-align: left; transition: all 0.2s; }
+        .quiz-opt:hover { border-color: var(--python-blue-light); background: rgba(48,105,152,0.2); }
+        .quiz-opt.correct { border-color: var(--success); background: rgba(76,175,80,0.15); color: var(--success); }
+        .quiz-opt.wrong { border-color: var(--error); background: rgba(244,67,54,0.1); color: var(--error); }
+        .quiz-feedback { margin-top: 14px; padding: 12px 16px; border-radius: 10px; font-size: 0.9rem; display: none; }
+        .quiz-feedback.show { display: block; }
+        .quiz-feedback.ok { background: rgba(76,175,80,0.15); border: 1px solid rgba(76,175,80,0.3); color: var(--success); }
+        .quiz-feedback.fail { background: rgba(244,67,54,0.1); border: 1px solid rgba(244,67,54,0.3); color: var(--error); }
+        .quiz-next { margin-top: 14px; background: linear-gradient(135deg, var(--python-yellow-dark), var(--python-yellow)); color: var(--bg-dark); border: none; border-radius: 8px; padding: 10px 22px; font-weight: 700; cursor: pointer; display: none; transition: all 0.2s; font-size: 0.95em; }
+        .quiz-next.show { display: inline-block; }
+        .quiz-next:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(255,212,59,0.4); }
+
+        .flow-diagram { display: flex; flex-direction: column; align-items: center; gap: 0; margin: 20px 0; padding: 20px; }
+        .flow-box { background: var(--bg-card); border: 2px solid var(--python-blue); border-radius: 10px; padding: 12px 25px; text-align: center; font-weight: 600; position: relative; min-width: 200px; }
+        .flow-box.start { border-radius: 25px; background: linear-gradient(135deg, var(--python-blue), var(--python-blue-light)); border-color: var(--python-blue-light); }
+        .flow-box.decision { border-color: var(--python-yellow); background: rgba(255,212,59,0.1); color: var(--python-yellow); border-radius: 10px; padding: 15px 25px; min-width: 200px; }
+        .flow-box.action { border-color: var(--python-blue-light); background: rgba(75,139,190,0.1); }
+        .flow-box.end { border-radius: 25px; background: linear-gradient(135deg, var(--python-yellow-dark), var(--python-yellow)); border-color: var(--python-yellow); color: var(--bg-dark); }
+        .flow-arrow { width: 2px; height: 30px; background: var(--text-muted); position: relative; }
+        .flow-arrow::after { content: '▼'; position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); color: var(--text-muted); font-size: 0.7em; }
+        .flow-label { font-size: 0.8em; color: var(--python-yellow); font-weight: 600; margin: 5px 0; }
+        .flow-branch { display: flex; gap: 40px; align-items: flex-start; margin: 10px 0; }
+        .flow-branch-item { display: flex; flex-direction: column; align-items: center; gap: 0; }
+
+        .comparison-table { width: 100%; min-width: 500px; border-collapse: separate; border-spacing: 0; margin: 20px auto; border-radius: 10px; overflow: hidden; border: 1px solid rgba(48,105,152,0.3); }
+        .comparison-table th { background: linear-gradient(135deg, var(--python-blue-dark), var(--python-blue)); color: var(--python-yellow); padding: 14px 18px; text-align: left; font-weight: 700; font-size: 0.9em; text-transform: uppercase; letter-spacing: 0.5px; text-align: center;}	
+        .comparison-table td { background: var(--bg-card); padding: 12px 18px; border-bottom: 1px solid rgba(48,105,152,0.15); font-size: 0.9em; }
+        .comparison-table tr:last-child td { border-bottom: none; }
+        .comparison-table tr:hover td { background: rgba(48,105,152,0.1); }
+        .comparison-table code { background: rgba(255,212,59,0.1); color: var(--python-yellow); padding: 2px 8px; border-radius: 4px; font-family: 'Consolas', monospace; font-size: 0.9em; }
+
+        .tip-box { background: rgba(255,212,59,0.08); border-left: 4px solid var(--python-yellow); border-radius: 0 10px 10px 0; padding: 18px 20px; margin: 20px 0; }
+        .tip-box .tip-title { color: var(--python-yellow); font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+        .tip-box p { color: var(--text-muted); font-size: 0.95em; }
+        .warning-box { background: rgba(244,67,54,0.08); border-left: 4px solid var(--error); border-radius: 0 10px 10px 0; padding: 18px 20px; margin: 20px 0; }
+        <!-- .warning-box .warning-title { color: var(--error); font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; } -->
+		.warning-box .warning-title { color: var(--color-rojo); font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+		.warning-box p { color: #fef08a; font-size: 0.95em; }
+		.note-box { background: rgba(255,212,59,0.08); border-left: 4px solid var(--color-green); border-radius: 0 10px 10px 0; padding: 18px 20px; margin: 20px 0; }
+        .note-box .note-title { color: var(--color-green); font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+        .note-box p { color: var(--text-muted); font-size: 0.95em; }
+
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(48,105,152,0.2); }
+        .nav-arrow-btn { background: linear-gradient(135deg, var(--python-blue), var(--python-blue-light)); color: #fff; border: none; padding: 12px 25px; border-radius: 10px; cursor: pointer; font-size: 0.95em; font-weight: 600; transition: all 0.3s ease; display: flex; align-items: center; gap: 8px; }
+        .nav-arrow-btn:hover { background: linear-gradient(135deg, var(--python-yellow-dark), var(--python-yellow)); color: var(--bg-dark); transform: translateY(-2px); box-shadow: 0 4px 15px rgba(255,212,59,0.3); }
+        .nav-arrow-btn:disabled { opacity: 0.3; cursor: not-allowed; transform: none; box-shadow: none; }
+
+        .score-panel { position: fixed; bottom: 20px; right: 20px; background: var(--bg-card); border: 2px solid var(--python-yellow); border-radius: 15px; padding: 15px 20px; box-shadow: 0 8px 30px rgba(0,0,0,0.5); z-index: 999; min-width: 180px; }
+        .score-panel .score-label { font-size: 0.75em; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+        .score-panel .score-value { font-size: 2em; font-weight: 800; color: var(--python-yellow); line-height: 1; }
+        .score-panel .score-total { font-size: 0.85em; color: var(--text-muted); }
+
+        footer { text-align: center; padding: 30px 20px; color: var(--text-muted); font-size: 0.85em; border-top: 1px solid rgba(48,105,152,0.2); margin-top: 40px; }
+        @media (max-width: 768px) {
+            header h1 { font-size: 1.8em; } 
+			.section-title { font-size: 1.5em; } 
+			.section-subtitle { padding-left: 0; }
+            .nav-container { gap: 5px; } 
+			.nav-btn { padding: 6px 12px; font-size: 0.75em; } 
+			.code-body pre { font-size: 0.8em; }
+            .demo-input-group { flex-direction: column; align-items: stretch; } 
+			.demo-input-group label { min-width: auto; }
+            .flow-branch { flex-direction: column; gap: 15px; } 
+			.score-panel { bottom: 10px; right: 10px; padding: 10px 15px; min-width: 140px; }
+            .score-panel .score-value { font-size: 1.5em; } .python-logo-svg { width: 80px; height: 80px; }
+			.footer-logo-space img { height: 45px; }
+        }
+
+        .bounce-in { animation: bounceIn 0.6s ease; }
+        @keyframes bounceIn { 0% { transform: scale(0.3); opacity: 0; } 50% { transform: scale(1.05); } 70% { transform: scale(0.9); } 100% { transform: scale(1); opacity: 1; } }
+
+        .challenge-box { background: linear-gradient(135deg, rgba(255,152,0,0.1), rgba(244,67,54,0.05)); border: 2px solid var(--warning); border-radius: var(--border-radius); padding: 25px; margin: 25px 0; }
+        .challenge-box .challenge-title { color: var(--warning); font-size: 1.1em; font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+        .challenge-box p { color: var(--text-muted); margin-bottom: 10px; }
+        .mini-editor { background: var(--bg-code); border-radius: 10px; border: 1px solid rgba(48,105,152,0.3); overflow: hidden; margin: 15px 0; }
+        .mini-editor-header { background: rgba(48,105,152,0.3); padding: 8px 15px; display: flex; justify-content: space-between; align-items: center; }
+        .mini-editor-header span { font-size: 0.8em; color: var(--text-muted); font-weight: 600; }
+        .editor-instructions { background: rgba(255,212,59,0.06); border-bottom: 1px solid rgba(48,105,152,0.2); padding: 12px 18px; font-family: 'Consolas', monospace; font-size: 0.85em; color: var(--text-muted); line-height: 1.8; white-space: pre; user-select: text; -webkit-user-select: text; }
+        .editor-instructions .instruction-line { color: #546e7a; font-style: italic; }
+        .editor-instructions .instruction-var { color: #ffcb6b; }
+        .mini-editor textarea { width: 100%; min-height: 280px; background: transparent; border: none; color: var(--text-light); font-family: 'Consolas', monospace; font-size: 0.9em; padding: 15px; resize: vertical; outline: none; line-height: 1.8; tab-size: 4; }
+        .mini-editor textarea::placeholder { color: rgba(160,160,184,0.3); }
+        .mini-editor-footer { padding: 10px 15px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; border-top: 1px solid rgba(48,105,152,0.2); }
+        .editor-output { background: var(--bg-code); border: 1px solid rgba(48,105,152,0.2); border-radius: 8px; padding: 12px 15px; font-family: 'Consolas', monospace; font-size: 0.85em; min-height: 40px; margin-top: 10px; white-space: pre-wrap; color: var(--text-muted); }
+        .editor-output.success { border-color: rgba(76,175,80,0.4); color: var(--success); }
+        .editor-output.error { border-color: rgba(244,67,54,0.4); color: var(--error); }
+        .steps { display: flex; justify-content: center; gap: 5px; margin: 20px 0; flex-wrap: wrap; }
+        .step-dot { width: 35px; height: 35px; border-radius: 50%; background: rgba(48,105,152,0.2); border: 2px solid rgba(48,105,152,0.3); display: flex; align-items: center; justify-content: center; font-size: 0.8em; font-weight: 700; color: var(--text-muted); transition: all 0.3s; }
+        .step-dot.completed { background: var(--python-blue); border-color: var(--python-blue-light); color: #fff; }
+        .step-dot.current { background: var(--python-yellow); border-color: var(--python-yellow); color: var(--bg-dark); transform: scale(1.2); }
+        .solution-toggle { background: none; border: 1px solid rgba(255,212,59,0.3); color: var(--python-yellow); padding: 8px 18px; border-radius: 8px; cursor: pointer; font-size: 0.85em; transition: all 0.3s ease; margin-top: 10px; }
+        .solution-toggle:hover { background: rgba(255,212,59,0.1); border-color: var(--python-yellow); }
+        .solution-content { display: none; margin-top: 10px; }
+        .solution-content.visible { display: block; }
+
+
+	
+	
+	.section-header {
+		display: flex;
+		align-items: center;
+		gap: 16px;
+		margin-bottom: 28px;
+		padding-bottom: 18px;
+		border-bottom: 1px solid var(--border);
+	}
+  
+	.section-icon {
+		width: 48px;
+		height: 48px;
+		border-radius: 12px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 22px;
+		flex-shrink: 0;
+	}
+
+	.icon-blue { background: rgba(48,105,152,0.25); border: 1px solid rgba(48,105,152,0.4); }
+	.icon-yellow { background: rgba(255,212,59,0.15); border: 1px solid rgba(255,212,59,0.3); }
+	.icon-green { background: rgba(63,185,80,0.15); border: 1px solid rgba(63,185,80,0.3); }
+	.icon-red { background: rgba(248,81,73,0.15); border: 1px solid rgba(248,81,73,0.3); }
+	.icon-purple { background: rgba(210,168,255,0.15); border: 1px solid rgba(210,168,255,0.3); }
+	.icon-orange { background: rgba(240,136,62,0.15); border: 1px solid rgba(240,136,62,0.3); }
+	
+	.section-header-text h2 {
+		font-size: 1.7rem;
+		font-weight: 700;
+		letter-spacing: -0.5px;
+	}
+	
+	.section-header-text p {
+		color: var(--text-dim);
+		font-size: 0.9rem;
+		margin-top: 4px;
+	}
+	
+	/* COMPARISON TABLE */
+  .cmp-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 0.9rem;
+  }
+
+  .cmp-table th {
+    background: var(--py-blue);
+    color: white;
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+
+  .cmp-table th:first-child { border-radius: 10px 0 0 0; }
+  .cmp-table th:last-child { border-radius: 0 10px 0 0; }
+
+  .cmp-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+
+  .cmp-table tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+  .cmp-table tr:hover td { background: rgba(48,105,152,0.08); }
+  .cmp-table td:first-child { font-family: 'JetBrains Mono', monospace; color: var(--py-yellow); font-weight: 700; }
+  
+  /* ANCHO DE LA TABLA */
+	.comparison-table.table-compact th,
+	.comparison-table.table-compact td {
+		font-size: 0.9em;
+		padding: 12px 18px;
+		white-space: nowrap;
+	}
+
+    /* SECCIÓN EXPANDIBLE */
+	.expandable-card { cursor: pointer; transition: all 0.3s ease; }
+	.expandable-card:hover { transform: translateX(5px); }
+	.expandable-card .expandable-details { display: none; margin-top: 15px; padding-top: 15px; border-top: 2px solid var(--python-blue); }
+	.expandable-card.expanded .expandable-details { display: block; animation: fadeIn 0.3s ease; }
+	.expandable-card h3::after { content: " ▶"; font-size: 0.8em; margin-left: auto; }
+	.expandable-card.expanded h3::after { content: " ▼"; }
+
+    /* ── Prism syntax highlighting ── */
+    .snippet-tag {
+      font-family: 'Consolas','Monaco','Courier New',monospace;
+      font-size: .72rem;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+    .tag-output { background: rgba(76,175,80,.15); color: #4caf50; }
+
+    .output-bar { border-top: 1px solid rgba(48,105,152,0.3); justify-content: flex-end; }
+
+    /* code-wrap: columna de números + bloque de código */
+    .code-wrap {
+      display: flex;
+      overflow-x: auto;
+    }
+    .line-numbers-col {
+      flex-shrink: 0;
+      background: rgba(48,105,152,0.15);
+      border-right: 1px solid rgba(48,105,152,0.3);
+      padding: 15px 12px 15px 14px;
+      font-family: 'Consolas','Monaco','Courier New',monospace;
+      font-size: 0.9em;
+      line-height: 1.8;
+      color: #445566;
+      text-align: right;
+      user-select: none;
+      -webkit-user-select: none;
+      pointer-events: none;
+    }
+    .line-numbers-col span { display: block; }
+    .code-wrap pre[class*="language-"] {
+      flex: 1;
+      margin: 0 !important;
+      border-radius: 0 !important;
+      padding: 15px 20px !important;
+      background: transparent !important;
+      font-family: 'Consolas','Monaco','Courier New',monospace !important;
+      font-size: 0.9em !important;
+      line-height: 1.8 !important;
+      overflow-x: visible;
+    }
+
+    /* Prism token overrides */
+    .token.comment,.token.prolog,.token.doctype { color: #546e7a !important; font-style: italic; }
+    .token.keyword  { color: #c792ea !important; font-weight: bold; }
+    .token.builtin  { color: #89ddff !important; }
+    .token.string,.token.char { color: #c3e88d !important; }
+    .token.number   { color: #f78c6c !important; }
+    .token.function { color: #82aaff !important; }
+    .token.class-name { color: #89ddff !important; font-weight: 600; }
+    .token.decorator,.token.at-rule { color: #4ade80 !important; }
+    .token.boolean  { color: #ff5370 !important; font-weight: bold; }
+    .token.operator { color: #89ddff !important; }
+    .token.punctuation { color: #89ddff !important; }
+
+    /* output-body (debajo de la barra de salida) */
+    .output-body {
+      background: rgba(0,0,0,0.25);
+      padding: 12px 20px;
+      font-family: 'Consolas','Monaco','Courier New',monospace;
+      font-size: 0.9em;
+      line-height: 1.8;
+    }
+	
+	.output-body pre {
+		color: #4ade80;
+	}
+    .output-line { display: block; color: var(--success); }
+    .output-line::before { content: '>>> '; color: rgba(160,160,184,0.5); user-select: none; }
+	
+	/* output-body-file (debajo de la barra de salida) */
+    .output-body-file {
+      background: #E8DFC8;
+      padding: 12px 20px;
+      font-family: 'Consolas','Monaco','Courier New',monospace;
+      font-size: 1.1em;
+      line-height: 1.8;
+    }
+	
+	.output-body-file pre {
+		color: #2E2416;
+	}
+
+    /* ── section heading ── */
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: .8rem;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+      margin-top: 48px;
+    }
+
+    .section-label::before {
+      content: '';
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--python-yellow);
+      border-radius: 2px;
+    }
+
+
+/* ───────────────────────────────────────── */
+/* ESTILOS TIPO python_syntax_OKAS.html      */
+/* ───────────────────────────────────────── */
+
+.snippet {
+  background: var(--bg-card);
+  border: 1px solid rgba(48,105,152,0.25);
+  border-radius: 12px;
+  margin-bottom: 32px;
+  overflow: hidden;
+  transition: border-color .2s, box-shadow .2s;
+}
+
+.snippet:hover {
+  border-color: rgba(255,212,59,.35);
+  box-shadow: 0 0 32px rgba(255,212,59,.06);
+}
+
+.snippet-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 18px;
+  background: rgba(255,255,255,0.03);
+  border-bottom: 1px solid rgba(48,105,152,0.25);
+  gap: 12px;
+}
+
+.dots {
+  display: flex;
+  gap: 6px;
+}
+
+.dots span {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: block;
+}
+
+.dots span:nth-child(1) { background: #ff5f57; }
+.dots span:nth-child(2) { background: #febc2e; }
+.dots span:nth-child(3) { background: #28c840; }
+
+.snippet-title {
+  font-family: 'Consolas','Monaco','Courier New',monospace;
+  font-size: .8rem;
+  color: var(--text-muted);
+  flex: 1;
+  text-align: center;
+}
+
+.snippet-tag {
+  font-family: 'Consolas','Monaco','Courier New',monospace;
+  font-size: .72rem;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+.tag-fn {
+  background: rgba(92,216,247,.15);
+  color: #5cd8f7;
+}
+
+.tag-output {
+  background: rgba(74,222,128,.15);
+  color: #4ade80;
+}
+
+.tag-file {
+  background: rgba(251,146,60,.15);
+  color: #fb923c;
+}
+
+.output-bar {
+  border-top: 1px solid rgba(48,105,152,0.25);
+  justify-content: flex-end;
+}
+
+.snippet pre[class*="language-"] {
+  margin: 0 !important;
+  border-radius: 0 !important;
+  padding: 22px 24px !important;
+  background: transparent !important;
+  font-family: 'Consolas','Monaco','Courier New',monospace !important;
+  font-size: .85rem !important;
+  line-height: 1.75 !important;
+  overflow-x: auto;
+}
+
+.output-body {
+  background: #0a0c10;
+  padding: 16px 24px;
+  font-family: 'Consolas','Monaco','Courier New',monospace;
+  font-size: .85rem;
+  line-height: 1.75;
+}
+
+.output-line {
+  display: block;
+  color: #4ade80;
+}
+
+.output-line::before {
+  content: '>>> ';
+  color: var(--text-muted);
+  user-select: none;
+}
+
+.code-wrap {
+  display: flex;
+  overflow-x: auto;
+}
+
+.line-numbers-col {
+  flex-shrink: 0;
+  background: rgba(255,255,255,0.03);
+  border-right: 1px solid rgba(48,105,152,0.25);
+  padding: 22px 14px 22px 16px;
+  font-family: 'Consolas','Monaco','Courier New',monospace;
+  font-size: .85rem;
+  line-height: 1.75;
+  color: #3d4a6a;
+  text-align: right;
+  user-select: none;
+  -webkit-user-select: none;
+  pointer-events: none;
+}
+
+.line-numbers-col span {
+  display: block;
+}
+
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: .8rem;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+  margin-top: 48px;
+}
+
+.section-label::before {
+  content: '';
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--python-yellow);
+  border-radius: 2px;
+}
+
+/***FOOTER***/
+	.footer-m365 {
+    background: linear-gradient(
+        180deg,
+        #0d1230 0%, 
+		#060a1a 100%
+    );
+    /*border-top: 1px solid #edebe9;*/
+    padding: 10px 5%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: center;
+  }
+  .footer-content{
+    max-width:900px;      /* mismo ancho que main */
+    margin:0 auto;
+    padding:10px 20px;
+}
+  .footer-m365-label {
+    text-align: center;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #7fb8d9;           /* azul-gris suave, legible sobre fondo oscuro, sin competir con el título */
+    opacity: 0.85;
+    margin-bottom: 15px;
+  }
+  .footer-m365-title {
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    color: #eaf6ff;           /* blanco-azulado, casi blanco, para máximo contraste y jerarquía */
+    text-shadow: 0 0 12px rgba(58, 214, 245, 0.15); /* un glow cian sutil, conecta con el brillo de los logos */
+	margin-bottom: 0px;
+  }
+
+
+.footer-top-bar{
+  height:3px;
+  background:linear-gradient(90deg,#0a2e6b 0%,#1a55d6 45%,#11c9f5 100%);
+}
+
+.footer-bottom-bar{
+  height:3px;
+  background:linear-gradient(90deg,#11c9f5 0%,#1a55d6 55%,#0a2e6b 100%);
+}
+
+.footer-banner{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  padding:0px 0px;
+  padding-bottom: 10px;
+}
+.footer-logo-space{
+  /*width:55px;
+  height:65px;*/
+  display:flex;
+  flex-direction: row;   /* logo arriba, nombre abajo, en vez de lado a lado */
+  align-items:center;
+  justify-content:center;
+}
+.footer-logo-space img{
+  filter: drop-shadow(0 0 6px rgba(58, 214, 245, 0.25));
+  height: 34px;
+  width: auto;
+}
+.footer-logo-space .name{
+  font-size: 1rem;
+  font-weight:700;
+  background: linear-gradient(to right, #0a3d91, #1a6dd4, #3ad6f5);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.footer-divider{
+  width:2px;
+  height:60px;
+  background:linear-gradient(to bottom,#0a2e6b,#1a55d6,#11c9f5);
+}
+.footer-text{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  flex-wrap:wrap;
+}
+.footer-text .label{
+  font-size: 1rem;
+  font-weight:700;
+  padding-left: 25px;
+  color:#8fb8d9;
+}
+.footer-text .name{
+  font-size: 1rem;
+  font-weight:700;
+  /* background:linear-gradient(to right, #0a3d91, #1a6dd4); */
+  background: repeating-linear-gradient(to right, #0a3d91 0%, #1a6dd4 55%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+
+</style>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css" rel="stylesheet"/>
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <svg class="python-logo-svg" viewBox="0 0 256 255" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="pyBlueGrad" x1="12.961%" y1="0.475%" x2="99.844%" y2="99.675%"><stop offset="0%" stop-color="#387EB8"/><stop offset="100%" stop-color="#366994"/></linearGradient>
+                    <linearGradient id="pyYellowGrad" x1="12.961%" y1="0.475%" x2="99.844%" y2="99.675%"><stop offset="0%" stop-color="#FFD43B"/><stop offset="100%" stop-color="#FFE873"/></linearGradient>
+                </defs>
+                <path d="M126.916 0C62.366 0 66.173 28.423 66.173 28.423L66.274 57.564H128.183V68.615H31.131C31.131 68.615 0.085 65.185 0.085 125.675C0.085 186.164 26.773 185.833 26.773 185.833H53.592V158.615C53.592 158.615 53.238 131.22 81.577 131.22H184.388C184.388 131.22 209.822 131.832 209.822 105.038V35.156C209.822 35.156 213.486 0 126.916 0ZM93.314 20.983C99.709 20.983 104.897 26.17 104.897 32.565C104.897 38.96 99.709 44.147 93.314 44.147C86.919 44.147 81.733 38.96 81.733 32.565C81.733 26.17 86.919 20.983 93.314 20.983Z" fill="url(#pyBlueGrad)"/>
+                <path d="M128.76 254.684C193.309 254.684 189.503 226.261 189.503 226.261L189.402 197.12H127.493V186.069H224.545C224.545 186.069 255.591 189.499 255.591 129.01C255.591 68.52 228.903 68.851 228.903 68.851H202.084V96.07C202.084 96.07 202.438 123.464 174.099 123.464H71.289C71.289 123.464 45.854 122.852 45.854 149.646V219.528C45.854 219.528 42.19 254.684 128.76 254.684ZM162.361 233.701C155.966 233.701 150.779 228.514 150.779 222.119C150.779 215.724 155.966 210.537 162.361 210.537C168.756 210.537 173.942 215.724 173.942 222.119C173.942 228.514 168.756 233.701 162.361 233.701Z" fill="url(#pyYellowGrad)"/>
+            </svg>
+        </div>
+        <h1>Fundamentos de Programación en <span class="blue">Python</span></h1>
+        <p class="text-center">
+			Tutorial · Aprende los <span class="yellow"><strong>Fundamentos de Programación</strong></span>
+		</p>
+    </header>
+
+    <nav>
+        <div class="nav-container">
+            <button class="nav-btn active" onclick="goToSection(0)">🏠 Inicio</button>
+            <button class="nav-btn" onclick="goToSection(1)">1 📛 Variables</button>
+            <button class="nav-btn" onclick="goToSection(2)">2 🔢 Tipos de Datos</button>
+            <button class="nav-btn" onclick="goToSection(3)">3 🔣 Operadores</button>
+            <button class="nav-btn" onclick="goToSection(4)">4 📥 Entrada de Datos</button>
+            <button class="nav-btn" onclick="goToSection(5)">5 📤 Salida de Datos</button>
+            <button class="nav-btn" onclick="goToSection(6)">6 🏷️ Especificadores de Formato - f-strings</button>
+			<button class="nav-btn" onclick="goToSection(7)">7 🛡️ Type Hints</button>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        <div class="progress-text" id="progressText">Sección 1 de 8</div>
+    </nav>
+
+    <main>
+		<!-- ================================================== -->
+		<!-- ===================== INICIO ===================== -->
+		<!-- ================================================== -->
+        <div class="section active" id="section-0">           			
+			<div class="section-header">
+				<div class="section-icon icon-blue">🏠</div>
+				<div class="section-header-text">
+					<h2>Fundamentos de Programación</h2>
+					<p>Lo básico sobre Python</p>
+				</div>
+			</div>
+			
+			
+			<div class="card">
+				<p>
+					<span class="highlight">Python</span> es un lenguaje interpretado, de tipado dinámico y alto nivel, diseñado para que el código sea claro y expresivo. Todo programa, 
+					sin importar su complejidad, 					se construye sobre tres pilares fundamentales: <strong>cómo se representa la información, cómo se transforma y cómo se 
+					comunica con el exterior</strong>.
+				</p>
+			</div>
+			
+			<div class="card">
+				<p>
+					Los <strong>tipos de datos</strong> definen la naturaleza de la información que maneja un programa: números enteros o decimales para cálculos, cadenas de texto para comunicar, y 
+					valores booleanos para tomar decisiones. Python infiere el tipo automáticamente, pero conocerlo es esencial para operar con precisión.
+				</p>
+			</div>
+			
+			<div class="card">
+				<p>
+					Los <strong>operadores</strong> son los instrumentos que permiten transformar esa información: realizan cálculos aritméticos, comparan valores, combinan condiciones lógicas y manipulan 
+					datos a nivel de bits. Cuando se combinan varios operadores en una misma expresión, la precedencia determina el orden en que Python los evalúa.
+				</p>
+			</div>
+			
+			<div class="card">
+				<p>
+					Finalmente, todo programa útil necesita interactuar con el mundo: <strong>recibir datos del usuario</strong> con <code>input()</code> y mostrar resultados con <code>print()</code>. 
+					Dominar la entrada y salida, junto con las <strong>f-strings</strong>, permite presentar información de forma clara, formateada y profesional.
+				</p>
+			</div>
+			
+			<div class="card">
+				<p>
+					Estos elementos, sumados a las sentencias de asignación, forman el vocabulario básico con el que se construye cualquier programa en Python.
+				</p>
+			</div>
+			
+            <div class="tip-box">
+				<div class="tip-title">💡 Dato importante</div>
+				<p>
+					La diferencia fundamental con C: <span class="highlight">Python es de tipado dinámico</span>. No declaras el tipo de una variable, Python lo infiere 
+					en tiempo de ejecución. No hay int x = 5; — solo x = 5.
+				</p>
+			</div>
+			
+
+            
+            <div class="nav-buttons"><button class="nav-arrow-btn" disabled>🏠 Inicio del tutorial</button><button class="nav-arrow-btn" onclick="goToSection(1)">Siguiente: Variables →</button></div>
+        </div>
+		
+		<!-- ======================================================================= -->
+		<!-- ============================== VARIABLES ============================== -->
+		<!-- ======================================================================= -->
+        <div class="section" id="section-1">           			
+			<div class="section-header">
+				<div class="section-icon icon-blue">🚦</div>
+				<div class="section-header-text">
+					<h2>Variables</h2>
+					<p>Nombrado, convenciones y alcance básico en Python</p>
+				</div>
+			</div>
+			
+			
+			<div class="card">
+				<h3>🔤 ¿Qué es una variable?</h3>
+				<p>
+					Una <span class="highlight">variable</span> es un nombre que apunta a un objeto almacenado en memoria. En Python no
+					se declara el tipo: se crea en el momento de la primera asignación.
+				</p>
+				<div class="snippet">
+					<div class="snippet-bar">
+					  <div class="dots"><span></span><span></span><span></span></div>
+					  <span class="snippet-title">Python</span>
+					  <span class="snippet-tag tag-fn">sintaxis</span>
+					</div>
+					<div class="code-wrap">
+						<div class="line-numbers-col"></div>
+<pre>
+<code class="language-python">temperatura = 36.6    # float
+nombre      = "Ana"   # str
+activo      = True    # bool</code>
+</pre>
+					</div>
+				</div>				
+			</div>
+			
+			
+			<div class="tip-box" style="margin-top:15px;">
+				<div class="tip-title">💡 Objeto</div>
+				<p>En Python aplica una regla de oro: <strong>Absolutamente todo es un objeto</strong>. Los números, las letras, las listas, las funciones e incluso los tipos de datos</p>
+			</div>
+			
+			
+			<div class="card">
+				<h3>📏 Reglas de nombrado</h3>
+				<table class="comparison-table">
+					<thead><tr><th>REGLA</th><th>VÁLIDO</th><th>INVÁLIDO</th></tr></thead>
+					<tbody>
+						<tr><td>Solo letras, dígitos y <code>_</code></td><td><code>suma_total</code></td><td><code>suma-total</code></td></tr>
+						<tr><td>No puede empezar con un dígito</td><td><code>var1</code></td><td><code>1var</code></td></tr>
+						<tr><td>Sensible a mayúsculas/minúsculas</td><td><code>Nombre ≠ nombre</code></td><td>—</td></tr>
+						<tr><td>No puede ser una palabra reservada</td><td><code>mi_lista</code></td><td><code>list</code>, <code>for</code></td></tr>
+					</tbody>
+				</table>
+			</div>
+			
+			
+			<div class="card">
+				<h3>🐍 Convención: <span class="highlight">snake_case</span></h3>
+				<p>Python usa <strong>snake_case</strong> (palabras en minúsculas separadas por guion bajo) para variables y funciones. Las constantes se escriben en <strong>MAYÚSCULAS</strong>.</p>
+				<table class="comparison-table">
+					<thead><tr><th>ESTILO</th><th>USO</th><th>EJEMPLO</th></tr></thead>
+					<tbody>
+						<tr><td><code>snake_case</code></td><td>Variables y funciones</td><td><code>edad_usuario</code>, <code>calcular_area</code></td></tr>
+						<tr><td><code>UPPER_SNAKE_CASE</code></td><td>Constantes</td><td><code>PI = 3.14159</code>, <code>MAX_INTENTOS = 3</code></td></tr>
+						<tr><td><code>PascalCase</code></td><td>Clases (módulos futuros)</td><td><code>class CuentaBancaria</code></td></tr>
+					</tbody>
+				</table>
+			</div>
+			
+			
+			<div class="tip-box" style="margin-top:15px;">
+				<div class="tip-title">💡 Nombres descriptivos:</div>
+				<p>Prefiere <code>precio_unitario</code> sobre <code>p</code>. Un buen nombre documenta el código sin comentarios extra.</p>
+			</div>
+			
+			
+			<div class="card">
+				<h3>🔭 Alcance básico (Scope)</h3>
+				<p>
+					El <span class="highlight">alcance</span> de una variable define en qué partes del código puede ser leída o modificada.
+					En Python existen dos ámbitos principales para principiantes:
+				</p>
+				<table class="comparison-table">
+					<thead><tr><th>ÁMBITO</th><th>DÓNDE SE CREA</th><th>DÓNDE ES VISIBLE</th></tr></thead>
+					<tbody>
+						<tr><td><strong>Global</strong></td><td>Fuera de toda función, al nivel del módulo</td><td>En todo el archivo</td></tr>
+						<tr><td><strong>Local</strong></td><td>Dentro de una función</td><td>Solo dentro de esa función</td></tr>
+					</tbody>
+				</table>
+			</div>
+			
+			
+			<div class="card">
+				<h3>💻 Ejemplo:</h3>
+				<div class="snippet">
+					<div class="snippet-bar">
+					  <div class="dots"><span></span><span></span><span></span></div>
+					  <span class="snippet-title">Python</span>
+					  <span class="snippet-tag tag-fn">ejemplo</span>
+					</div>
+					<div class="code-wrap">
+						<div class="line-numbers-col"></div>
+<pre>
+<code class="language-python">mensaje = "Hola mundo"   # variable global
+
+def saludar():
+    saludo = "¡Buenos días!"  # variable local
+    print(saludo)
+    print(mensaje)  # puede leer la global
+
+saludar()
+# print(saludo)  ← ERROR: saludo no existe fuera de la función</code>
+</pre>
+					</div>
+					
+					<div class="snippet-bar output-bar">
+						<span class="snippet-tag tag-output">salida</span>
+					</div>
+
+					<div class="output-body">
+<pre>
+¡Buenos días!
+Hola mundo
+</pre>
+					</div>
+				</div>
+			</div>
+			
+			
+			<div class="warning-box" style="margin-top:15px;">
+				<div class="warning-title">⚠️ Regla práctica</div>
+				<p style="color:var(--text-muted);">Evita modificar variables globales desde dentro de funciones. Es mejor pasar los datos como parámetros y retornar resultados (tema de módulos siguientes).</p>
+			</div>
+			
+			
+			<div class="card">
+				<h3>🔄 Reasignación y tipado dinámico</h3>
+				<p>Una variable puede apuntar a objetos de distinto tipo a lo largo del programa, aunque hacerlo en exceso dificulta la lectura.</p>
+				<div class="snippet">
+					<div class="snippet-bar">
+					  <div class="dots"><span></span><span></span><span></span></div>
+					  <span class="snippet-title">Python</span>
+					  <span class="snippet-tag tag-fn">ejemplo</span>
+					</div>
+					<div class="code-wrap">
+						<div class="line-numbers-col"></div>
+<pre>
+<code class="language-python">x = 10          # x es int
+print(type(x))  # <class 'int'>
+x = "diez"      # ahora x es str
+print(type(x))  # <class 'str'></code>
+</pre>
+					</div>
+					
+					<div class="snippet-bar output-bar">
+						<span class="snippet-tag tag-output">salida</span>
+					</div>
+
+					<div class="output-body">
+<pre>
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;
+</pre>
+					</div>
+				</div>
+			</div>
+			
+			
+			<!-- ── Subsección: Comentarios y documentación básica ── -->
+			<div class="section-header" style="margin-top:40px;padding-top:24px;border-top:1px solid rgba(48,105,152,0.25);">
+				<div class="section-icon icon-green" style="font-size:18px;">💬</div>
+				<div class="section-header-text">
+					<h2 style="font-size:1.35rem;">Comentarios y documentación básica</h2>
+					<p>Cómo anotar y documentar el código en Python</p>
+				</div>
+			</div>
+			
+			
+			<div class="card">
+				<h3>💬 ¿Qué es un comentario?</h3>
+				<p>
+					Un <span class="highlight">comentario</span> es texto que Python <strong>ignora completamente</strong> durante la ejecución.
+					Sirve para explicar qué hace el código, por qué se tomó una decisión o para desactivar líneas temporalmente.
+					Un código bien comentado se entiende meses después sin releerlo entero.
+				</p>
+			</div>
+			
+			
+			<div class="tip-box" style="margin-top:15px;">
+				<div class="tip-title">💡 Regla de oro</div>
+				<p>
+					Si el código es claro, no necesita un comentario que repita lo obvio:
+					<br>
+					<code># suma a y b</code> junto a <code>a + b</code>, no aporta nada.
+				</p>
+			</div>
+			
+			
+			<div class="card">
+				<h3># Comentario de una línea</h3>
+				<p>Se inicia con el símbolo <code>#</code>. Todo lo que sigue en esa línea es ignorado por el intérprete.</p>
+				<div class="snippet">
+					<div class="snippet-bar">
+					  <div class="dots"><span></span><span></span><span></span></div>
+					  <span class="snippet-title">Python</span>
+					  <span class="snippet-tag tag-fn">ejemplo</span>
+					</div>
+					<div class="code-wrap">
+						<div class="line-numbers-col"></div>
+<pre>
+<code class="language-python"># Este programa calcula el área de un círculo
+PI = 3.14159             # constante matemática
+radio = 5
+area = PI * radio ** 2   # fórmula: π·r²
+print(area)              # 78.53975</code>
+</pre>
+					</div>
+					
+					<div class="snippet-bar output-bar">
+						<span class="snippet-tag tag-output">salida</span>
+					</div>
+
+					<div class="output-body">
+<pre>
+78.53975
+</pre>
+					</div>
+				</div>
+			</div>
+			
+			
+			<div class="card">
+				<h3>💬 Comentario de varias líneas</h3>
+				<p>
+					Python no tiene una sintaxis especial para comentarios multilínea. La convención es usar varias líneas con <code>#</code>,
+					o bien una cadena de texto entre comillas triples <code>"""..."""</code> que no se asigna a ninguna variable
+					(Python la evalúa y la descarta).
+				</p>
+				<div class="snippet">
+					<div class="snippet-bar">
+					  <div class="dots"><span></span><span></span><span></span></div>
+					  <span class="snippet-title">Python</span>
+					  <span class="snippet-tag tag-fn">ejemplo</span>
+					</div>
+					<div class="code-wrap">
+						<div class="line-numbers-col"></div>
+<pre>
+<code class="language-python"># Opción A: varias líneas con #
+# Este bloque convierte temperatura
+# de Celsius a Fahrenheit.
+celsius = 100
+fahrenheit = celsius * 9/5 + 32
+print(fahrenheit)   # 212.0
+
+# Opción B: cadena multilínea (no asignada)
+"""
+Este bloque también es ignorado.
+Se usa cuando el comentario es muy largo
+o contiene formato especial.
+"""
+print("Listo")</code>
+</pre>
+					</div>
+					
+					<div class="snippet-bar output-bar">
+						<span class="snippet-tag tag-output">salida</span>
+					</div>
+
+					<div class="output-body">
+<pre>
+212.0
+Listo
+</pre>
+					</div>
+				</div>
+			</div>
+			
+			
+			<div class="note-box">
+				<div class="note-title">📝 Nota:</div>
+				<p>
+					Las cadenas <code>"""..."""</code> <strong>no son comentarios reales</strong>: son objetos de tipo <code>str</code> que se crean y se descartan.
+					En la práctica se comportan como comentarios, pero si aparecen justo después de una función (def) o una clase (class), Python las trata como <strong>docstrings</strong> (documentación formal), no como comentarios.
+				</p>
+			</div>
+					
+			
+            
+            <div class="nav-buttons"><button class="nav-arrow-btn" onclick="goToSection(0)">← Anterior</button><button class="nav-arrow-btn" onclick="goToSection(2)">Siguiente: Tipos de Datos →</button></div>
+        </div>
+
+		<!-- ==================================================================================== -->
+		<!-- ================================== TIPOS DE DATOS ================================== -->
+		<!-- ==================================================================================== -->
+        <div class="section" id="section-2">
+			<div class="section-header">
+				<div class="section-icon icon-blue">🔢</div>
+				<div class="section-header-text">
+					<h2>Tipos de Datos</h2>
+					<p>Conoce cómo Python clasifica y almacena la información</p>
+				</div>
+			</div>
+			
+			
+			<div class="card">
+				<p>
+					Los tipos de datos definen <strong>qué clase de valor</strong> guarda una variable <strong>y qué operaciones se pueden hacer con ella</strong>. Python tiene varios tipos incorporados (built-in), organizados en categorías.
+				</p>				
+			</div>
+			
+			
+			<div class="card">
+				<h3>📋 Tabla</h3>
+				<p> Estos son algunos de los diferentes tipos de datos en Python:</p>
+				<table class="comparison-table">
+					<thead>
+						<tr><th>TIPO</th><th>DESCRIPCIÓN</th><th>EJEMPLO</th></tr>
+					</thead>
+					<tbody>
+						<tr><th colspan="3">NUMÉRICOS</th></tr>
+						<tr><td><code>int</code></td><td>Enteros de precisión arbitraria</td><td><code>x = 42</code></td></tr>
+						<tr><td><code>float</code></td><td>Números de punto flotante (IEEE 754)</td><td><code>pi = 3.1416</code></td></tr>
+						<tr><td><code>complex</code></td><td>Números complejos</td><td><code>z = 2 + 3j</code></td></tr>
+					
+						<tr><th colspan="3">BOOLEANO</th></tr>
+						<tr><td><code>bool</code></td><td>Valores lógicos: Verdadero o Falso</td><td><code>es_valido = True</code></td></tr>
+						
+						<tr><th colspan="3">TEXTO</th></tr>
+						<tr><td><code>str</code></td><td>Cadenas de texto</td><td><code>msg = "Hola ESIME"</code></td></tr>
+						
+						<tr><th colspan="3">SECUENCIAS</th></tr>
+						<tr><td><code>list</code></td><td>Colección ordenada y mutable de elementos</td><td><code>numeros = [10, 20, 30]</code></td></tr>
+						<tr><td><code>tuple</code></td><td>Colección ordenada e inmutable de elementos</td><td><code>coordenadas = (15, 30)</code></td></tr>
+						
+						<tr><th colspan="3">MAPEO</th></tr>
+						<tr><td><code>dict</code></td><td>Colección de pares clave-valor</td><td><code>persona = {"nombre": "Ana", "edad": 20}</code></td></tr>
+						
+						<tr><th colspan="3">CONJUNTOS</th></tr>
+						<tr><td><code>set</code></td><td>Colección desordenada de elementos únicos</td><td><code>colores = {"rojo", "verde", "azul"}</code></td></tr>
+															
+						<tr><th colspan="3">NULO</th></tr>
+						<tr><td><code>NoneType</code></td><td>Representa la ausencia de un valor. Su único valor es <code>None</code></td><td><code>resultado = None</code></td></tr>	
+					</tbody>
+				</table>			
+			</div>
+			
+			
+						
+			<div class="nav-buttons"><button class="nav-arrow-btn" onclick="goToSection(1)">← Anterior</button><button class="nav-arrow-btn" onclick="goToSection(3)">Siguiente: Operadores →</button></div>
+		</div>
+		
+		<!-- ======================================================================== -->
+		<!-- ============================== OPERADORES ============================== -->
+		<!-- ======================================================================== -->
+		<div class="section" id="section-3">
+			<div class="section-header">
+				<div class="section-icon icon-yellow">🔣</div>
+				<div class="section-header-text">
+					<h2>Operadores</h2>
+					<p>Símbolos que realizan operaciones sobre valores</p>
+				</div>
+			</div>
+			
+			
+			<div class="card">
+				<p>
+					Los <strong>operadores</strong> son símbolos que le indican a Python que realice una <strong>operación</strong> entre uno o más valores (llamados <strong>operandos</strong>), como sumar números, comparar valores o combinar condiciones.
+				</p>				
+			</div>
+			
+			
+			<div class="card">
+				<h3>1️⃣ Operadores Unarios</h3>
+				<p>Actúan sobre un solo operando</p>
+				<p>Considere <code>x = 5</code> como valor de referencia para los ejemplos.
+				<table class="comparison-table">
+					<thead>
+						<tr><th>OPERADOR</th><th>DESCRIPCIÓN</th><th>EJEMPLO</th><th>RESULTADO</th></tr>
+					</thead>
+					<tbody>
+						<tr><td><code>-</code></td><td>Negación aritmética</td><td><code>-x</code></td><td><code>-5</code></td></tr>
+						<tr><td><code>+</code></td><td>Identidad (sin cambios)</td><td><code>+x</code></td><td><code>5</code></td></tr>
+						<tr><td><code>~</code></td><td>NOT bit a bit (complemento)</td><td><code>~x</code></td><td><code>-6</code></td></tr>
+					</tbody>
+				</table>
+				<p>
+					El resultado de <code>~x</code> es <code>-6</code> porque el complemento a dos de <code>5</code> (binario <code>00000101</code>) produce <code>11111010</code>, que en enteros con signo 
+					equivale a <code>-(x + 1)</code>, es decir, <code>-6</code>.
+				</p>
+			</div>
+			
+			<div class="card">
+				<h3>➕ Operadores Aritméticos</h3>
+				<p>Realizan las operaciones matemáticas básicas</p>
+				<table class="comparison-table">
+					<thead>
+						<tr><th>OPERADOR</th><th>DESCRIPCIÓN</th><th>EJEMPLO</th><th>RESULTADO</th></tr>
+					</thead>
+					<tbody>
+						<tr><td><code>+</code></td><td>Suma</td><td><code>5 + 2</code></td><td><code>7</code></td></tr>
+						<tr><td><code>-</code></td><td>Resta</td><td><code>5 - 2</code></td><td><code>3</code></td></tr>
+						<tr><td><code>*</code></td><td>Multiplicación</td><td><code>5 * 2</code></td><td><code>10</code></td></tr>
+						<tr><td><code>/</code></td><td>División</td><td><code>5 / 2</code></td><td><code>2.5</code></td></tr>
+						<tr><td><code>//</code></td><td>División entera</td><td><code>5 // 2</code></td><td><code>2</code></td></tr>
+						<tr><td><code>%</code></td><td>Módulo (residuo)</td><td><code>5 % 2</code></td><td><code>1</code></td></tr>
+						<tr><td><code>**</code></td><td>Exponenciación</td><td><code>5 ** 2</code></td><td><code>25</code></td></tr>
+					</tbody>
+				</table>			
+			</div>
+			
+			<div class="card">
+				<h3>⚖️ Operadores Relacionales</h3>
+				<p>Comparan dos valores y devuelven True o False</p>
+				<table class="comparison-table">
+					<thead>
+						<tr><th>OPERADOR</th><th>DESCRIPCIÓN</th><th>EJEMPLO</th><th>RESULTADO</th></tr>
+					</thead>
+					<tbody>
+						<tr><td><code><</code></td><td>Menor que</td><td><code>5 < 8</code></td><td><code>True</code></td></tr>
+						<tr><td><code>></code></td><td>Mayor que</td><td><code>5 > 8</code></td><td><code>False</code></td></tr>
+						<tr><td><code><=</code></td><td>Menor o igual que</td><td><code>3 <= 2</code></td><td><code>False</code></td></tr>
+						<tr><td><code>>=</code></td><td>Mayor o igual que</td><td><code>3 >=  2</code></td><td><code>True</code></td></tr>
+						<tr><td><code>==</code></td><td>Igual que</td><td><code>9 == 9</code></td><td><code>True</code></td></tr>
+						<tr><td><code>!=</code></td><td>Diferente que</td><td><code>7 != 4</code></td><td><code>True</code></td></tr>						
+					</tbody>
+				</table>			
+			</div>
+			
+			<div class="card">
+				<h3>🧠 Operadores Lógicos</h3>
+				<p>Combinan o invierten expresiones booleanas para construir condiciones compuestas</p>
+				<table class="comparison-table">
+					<thead>
+						<tr><th>OPERADOR</th><th>NOMBRE / DESCRIPCIÓN</th><th>EJEMPLO</th><th>RESULTADO</th></tr>
+					</thead>
+					<tbody>
+						<tr><td><code>and</code></td><td>Regresa True si todas las condiciones son verdaderas</td><td><code>(5>1) and (3>1)</code></td><td><code>True</code></td></tr>
+						<tr><td><code>or</code></td><td>Regresa True si al menos una condición es verdadera</td><td><code>(5>1) or (1>5)</code></td><td><code>True</code></td></tr>
+						<tr><td><code>not</code></td><td>Invierte el valor lógico</td><td><code>not (7>0)</code></td><td><code>False</code></td></tr>					
+					</tbody>
+				</table>			
+			</div>
+			
+			<div class="card">
+				<h3>0️⃣1️⃣ Operadores Bit a Bit</h3>
+				<p>Manipulan los bits individuales de un entero</p>
+				<table class="comparison-table">
+					<thead>
+						<tr><th>OPERADOR</th><th>DESCRIPCIÓN</th><th>EJEMPLO</th><th>RESULTADO</th></tr>
+					</thead>
+					<tbody>
+						<tr><td><code>&</code></td><td>AND bit a bit</td><td><code>5 & 3</code></td><td><code>1</code></td></tr>
+						<tr><td><code>|</code></td><td>OR bit a bit</td><td><code>5 | 3</code></td><td><code>7</code></td></tr>
+						<tr><td><code>^</code></td><td>XOR bit a bit</td><td><code>5 ^ 3</code></td><td><code>6</code></td></tr>
+						<tr><td><code>~</code></td><td>NOT bit a bit</td><td><code>~5</code></td><td><code>-6</code></td></tr>
+						<tr><td><code><<</code></td><td>Desplazamiento izquierda</td><td><code>5 << 2</code></td><td><code>20</code></td></tr>
+						<tr><td><code>>></code></td><td>Desplazamiento derecha</td><td><code>5 >> 1</code></td><td><code>2</code></td></tr>						
+					</tbody>
+				</table>			
+			</div>
+			
+			<div class="card">
+				<h3>🪪 Operadores de Identidad</h3>
+				<p>
+					Verifican si dos variables apuntan exactamente al mismo objeto en memoria, no si tienen el mismo valor
+				</p>
+				<table class="comparison-table">
+					<thead>
+						<tr><th>OPERADOR</th><th>DESCRIPCIÓN</th><th>EJEMPLO</th><th>RESULTADO</th></tr>
+					</thead>
+					<tbody>
+						<tr><td><code>is</code></td><td>Regresa True si las variables son el mismo objeto</td><td><code>a = [1,2]; b = a; a is b</code></td><td><code>True</code></td></tr>
+						<tr><td><code>is not</code></td><td>Regresa True si las variables no son el mismo objeto</td><td><code>5 | 3</code></td><td>7</td></tr>					
+					</tbody>
+				</table>			
+			</div>
+			
+			<div class="card">
+				<h3>📦 Operadores de Pertenencia</h3>
+				<p>
+					Comprueban si un valor existe dentro de una secuencia como una lista, tupla, cadena o diccionario
+				</p>
+				<table class="comparison-table">
+					<thead>
+						<tr><th>OPERADOR</th><th>DESCRIPCIÓN</th><th>EJEMPLO</th><th>RESULTADO</th></tr>
+					</thead>
+					<tbody>
+						<tr><td><code>in</code></td><td>Regresa True si el valor está presente en la secuencia</td><td><code>3 in [1, 2, 3]</code></td><td><code>True</code></td></tr>
+						<tr><td><code>not in</code></td><td>Regresa True si el valor no está en la secuencia</td><td><code>"a" not in "hola"</code></td><td><code>False</code></td></tr>					
+					</tbody>
+				</table>			
+			</div>
+			
+			<div class="card">
+				<h3>🦭 Operador de Asignación Expresiva (Python 3.8+)</h3>
+				<p>
+					También conocido como <span class="highlight">operador morsa (walrus operator)</span>, es un operador que asigna un valor a una variable y al mismo tiempo devuelve ese valor dentro de una expresión, simplificando el código al combinar asignación y evaluación en una sola línea. 
+					Es útil para evitar cálculos repetitivos y suele usarse dentro de condicionales, ciclos, etc.
+				</p>
+				<table class="comparison-table">
+					<thead>
+						<tr><th>OPERADOR</th><th>DESCRIPCIÓN</th><th>EJEMPLO</th><th>RESULTADO</th></tr>
+					</thead>
+					<tbody>
+						<tr><td><code>:=</code></td><td>Asigna una valor a una variable<br>dentro de una expresión.</td><td><code>print(total := 10 + 20)</code></td><td>Imprime 30 y<br><code>total = 30</code></td></tr>					
+					</tbody>
+				</table>			
+			</div>
+			
+			
+			<div class="card">
+				<h3>⬅️ Sentencias de Asignación</h3>
+				<p>
+					Las sentencias de asignación son instrucciones en programación que evalúan una expresión del lado derecho y vinculan el resultado a un nombre o variable del lado izquierdo.
+				</p>
+				<table class="comparison-table">
+					<thead>
+						<tr><th>SENTENCIA</th><th>NOMBRE</th><th>EJEMPLO</th></tr>
+					</thead>
+					<tbody>
+						<tr><td><code>=</code></td><td>Asignación simple</td><td><code>x = 5</code></td></tr>
+						<tr><td><code>+=</code></td><td>Suma y asignación</td><td><code>x += 2</code></td></tr>
+						<tr><td><code>-=</code></td><td>Resta y asignación</td><td><code>x -= 3</code></td></tr>
+						<tr><td><code>*=</code></td><td>Multiplicación y asignación</td><td><code>x *= 2</code></td></tr>
+						<tr><td><code>/=</code></td><td>División y asignación</td><td><code>x /= 4</code></td></tr>
+						<tr><td><code>//=</code></td><td>División entera y asignación</td><td><code>x //= 3</code></td></tr>
+						<tr><td><code>%=</code></td><td>Módulo y asignación</td><td><code>x %= 3</code></td></tr>
+						<tr><td><code>**=</code></td><td>Exponente y asignación</td><td><code>x **= 2</code></td></tr>
+						<tr><td><code>&=</code></td><td>AND bit a bit y asignación</td><td><code>x &= 2</code></td></tr>
+						<tr><td><code>|=</code></td><td>OR bit a bit  y asignación</td><td><code>x |= 3</code></td></tr>
+						<tr><td><code>^=</code></td><td>XOR bit a bit y asignación</td><td><code>x ^= 1</code></td></tr>
+						<tr><td><code>>>=</code></td><td>Desplazamiento derecha y asignación</td><td><code>x >>= 1</code></td></tr>
+						<tr><td><code><<=</code></td><td>Desplazamiento izquierda y asignación</td><td><code>x <<= 1</code></td></tr>
+					</tbody>
+				</table>			
+			</div>
+			
+			
+			<div class="note-box">
+				<div class="note-title">📝 Nota:</div>
+				<p>
+					En <strong>teoría formal de lenguajes de programación</strong>, = (y sus variantes +=, -=, etc.) es una <strong>sentencia de asignación</strong> (assignment statement), no una expresión que devuelve un valor utilizable. Por eso en Python no puedes hacer esto:
+				</p>
+				<br>
+				<div class="snippet">
+					<div class="snippet-bar">
+					  <div class="dots"><span></span><span></span><span></span></div>
+					  <span class="snippet-title">Python</span>
+					  <span class="snippet-tag tag-fn">sintaxis</span>
+					</div>
+					<div class="code-wrap">
+						<div class="line-numbers-col"></div>
+<pre>
+<code class="language-python">print(x = 5)  # ❌ Error</code>
+</pre>
+					</div>
+				</div>
+				<p>
+					Si <code>=</code> fuera un operador normal (como <code>+</code>), podrías usarlo dentro de una expresión y obtener un valor de vuelta, pero no es así. Su función es ejecutar una acción (asignar), no producir un valor para usar en otra expresión.
+				</p>
+				<p>
+					Por convención y por practicidad en la enseñanza, se les agrupa dentro de "operadores", aunque se reconoce que técnicamente no forman una expresión, sino una sentencia.
+				</p>
+			</div>
+			
+			
+			<div class="card">
+				<h2>⬅️ Tipos principales de asignación</h2>
+				<p>
+					Para el operador de asignación <code><strong>=</strong></code> existen diversas variaciones de esta sentencia en Python:
+					<br>
+					<span class="highlight">A. Asignación Simple</span>
+					<br>
+					Es la más común, vinculando un valor único a una variable única.
+					<br>
+					Ejemplo:
+					<br>
+					<code>temperatura = 25.5</code>
+					<br><br>
+					<span class="highlight">B. Asignación Múltiple</span>
+					<br>
+					Permite inicializar varias variables con el mismo objeto en una sola línea.
+					<br>
+					Ejemplo:
+					<br>
+					<code>base = altura = profundidad = 0</code>
+					<br>Equivale a:
+					<br><code>base = 0</code>
+					<br><code>altura = 0</code>
+					<br><code>profundidad = 0</code>
+					<br><br>
+					<span class="highlight">C. Asignación Empaquetada (Unpacking)</span>
+					<br>
+					Permite asignar múltiples valores a múltiples variables simultáneamente basándose en una estructura iterable.
+					<br>
+					Ejemplo:
+					<br>
+					<code>x, y, z = 10, 20, 30</code>
+					<br>Equivale a:
+					<br><code>x = 10</code>
+					<br><code>y = 20</code>
+					<br><code>z = 30</code>
+				</p>
+			</div>
+			
+			
+			
+			<!-- ── Subsección: Comentarios y documentación básica ── -->
+			<div class="section-header" style="margin-top:40px;padding-top:24px;border-top:1px solid rgba(48,105,152,0.25);">
+				<div class="section-icon icon-green" style="font-size:18px;">🥇</div>
+				<div class="section-header-text">
+					<h2 style="font-size:1.35rem;">Precedencia de Operadores</h2>
+					<p>El orden en que Python evalúa los operadores dentro de una expresión cuando hay varios presentes</p>
+				</div>
+			</div>
+			
+			<div class="card">
+				<h3>Precedencia de Operadores</h3>
+				<p>
+					La precedencia de operadores es el conjunto de reglas que determinan el orden en que se evalúan los operadores dentro 
+					de una expresión, indicando cuáles se ejecutan primero cuando hay varios presentes.
+				</p>
+				<table class="comparison-table">
+					<thead>
+						<tr><th>NIVEL</th><th>OPERADOR(ES)</th><th>DESCRIPCIÓN</th><th>ASOCIATIVIDAD</th></tr>
+					</thead>
+					<tbody>
+						<tr><td>1</td><td><code>()</code></td><td>Paréntesis (agrupación)</td><td>Izq. a Der.</td></tr>
+						<tr><td>2</td><td><code>x[i]<br>x[i:j]<br>x(args)<br>x.attr<br>x.method()</code></td><td>Indexación<br>Slicing<br>Llamada a función<br>Acceso a atributo<br>Acceso a método</td><td>Izq. a Der.</td></tr>
+						<tr><td>3</td><td><code>**</code></td><td>Exponenciación</td><td>Der. a Izq.</td></tr>
+						<tr><td>4</td><td><code>+x   -x   ~x</code></td><td>Unarios</td><td>Der. a Izq.</td></tr>
+						<tr><td>5</td><td><code>*   /   //   %   @</code></td><td>Múltiplicación/División</td><td>Izq. a Der.</td></tr>
+						<tr><td>6</td><td><code>+   -</code></td><td>Suma/Resta</td><td>Izq. a Der.</td></tr>
+						<tr><td>7</td><td><code><<   >></code></td><td>Desplazamientos de bits</td><td>Izq. a Der.</td></tr>
+						<tr><td>8</td><td><code>&</code></td><td>AND Bitwise</td><td>Izq. a Der.</td></tr>
+						<tr><td>9</td><td><code>^</code></td><td>XOR Bitwise</td><td>Izq. a Der.</td></tr>
+						<tr><td>10</td><td><code>|</code></td><td>OR Bitwise</td><td>Izq. a Der.</td></tr>
+						<tr><td>11</td><td><code>==   !=   <   >   <=   >=<br>is   is not<br>in   not in</code></td><td>Relacionales<br>Identidad<br>Pertenencia</td><td>Izq. a Der.</td></tr>
+						<tr><td>12</td><td><code>not</code></td><td>NOT Lógico</td><td>Der. a Izq.</td></tr>
+						<tr><td>13</td><td><code>and</code></td><td>AND Lógico</td><td>Izq. a Der.</td></tr>
+						<tr><td>14</td><td><code>or</code></td><td>OR Lógico</td><td>Izq. a Der.</td></tr>
+						<tr><td>15</td><td><code>x if condición else y</code></td><td>Operador ternario (expresión condicional)</td><td>Izq. a Der.</td></tr>
+						<tr><td>16</td><td><code>lambda</code></td><td>Expresión lambda</td><td>Der. a Izq.</td></tr>
+						<tr><td>17</td><td><code>:=</code></td><td>Asignación Expresiva</td><td>Der. a Izq.</td></tr>
+						<tr><td>18</td><td><code>=<br>+= -= *= etc.</code></td><td>Asignación simple<br>Asignación compuesta</td><td>Der. a Izq.</td></tr>
+						
+					</tbody>
+				</table>			
+			</div>
+
+				
+			<div class="nav-buttons"><button class="nav-arrow-btn" onclick="goToSection(2)">← Anterior</button><button class="nav-arrow-btn" onclick="goToSection(4)">Siguiente: Entrada de Datos →</button></div>
+		</div>
+		
+		
+		
+		<!-- ============================================================================== -->
+		<!-- ============================== ENTRADA DE DATOS ============================== -->
+		<!-- ============================================================================== -->
+		<div class="section" id="section-4">
+			<div class="section-header">
+				<div class="section-icon icon-purple">📥</div>
+				<div class="section-header-text">
+					<h2>La función <span class="highlight">input()</span></h2>	
+					<p>Lee datos desde el teclado</p>
+				</div>
+			</div>
+			
+			
+			<div class="card">
+				<p>				
+					<span class="highlight">input()</span> es la función que se usa para pedirle datos al usuario desde el teclado mientras el programa se está ejecutando. Detiene el programa, espera a que el usuario escriba algo y presione Enter, y devuelve lo escrito <strong>siempre como texto (string)</strong>.
+				</p>
+			</div>
+			
+			
+			<div class="card">
+				<h3>📖 Sintaxis:</h3>
+				<div class="snippet">
+					<div class="snippet-bar">
+					  <div class="dots"><span></span><span></span><span></span></div>
+					  <span class="snippet-title">Python</span>
+					  <span class="snippet-tag tag-fn">sintaxis</span>
+					</div>
+					<div class="code-wrap">
+						<div class="line-numbers-col"></div>
+<pre>
+<code class="language-python">variable = input(mensaje_opcional)</code>
+</pre>
+					</div>
+				</div>
+				<p>
+					donde:
+					<ul>
+						<li><strong>mensaje_opcional</strong>: un texto (string) que se muestra como aviso o pregunta antes de que el usuario escriba. Es opcional.</li>
+						<li>El valor que el usuario ingresa se guarda en <strong>variable</strong>, y siempre es de tipo <strong>str</strong>, sin importar lo que se escriba.</li>
+					</ul>
+				</p>
+			</div>
+			
+			
+			<div class="warning-box">
+				<div class="warning-title">⚠️ Precaución:</div>
+				<p>
+					🔥 <code>input()</code> SIEMPRE devuelve una cadena (<code>str</code>). Aunque el usuario escriba números.
+				</p>
+			</div>
+			
+			
+			<div class="card">
+				<h3>💻 Ejemplo:</h3>
+				<div class="snippet">
+					<div class="snippet-bar">
+					  <div class="dots"><span></span><span></span><span></span></div>
+					  <span class="snippet-title">Python</span>
+					  <span class="snippet-tag tag-fn">ejemplo</span>
+					</div>
+					<div class="code-wrap">
+						<div class="line-numbers-col"></div>
+<pre>
+<code class="language-python">nombre = input("Nombre: ")</code>
+</pre>
+					</div>
+				</div>	
+			</div>
+			
+			
+			<div class="card">
+				<h3>🔄 Conversión de tipos</h3>
+				<p>	
+					Como <code>input()</code> siempre devuelve una cadena (str), normalmente se convierte.					
+				</p>
+				<h3>📖 Sintaxis</h3>
+				<div class="snippet">
+					<div class="snippet-bar">
+					  <div class="dots"><span></span><span></span><span></span></div>
+					  <span class="snippet-title">Python</span>
+					  <span class="snippet-tag tag-fn">sintaxis</span>
+					</div>
+					<div class="code-wrap">
+						<div class="line-numbers-col"></div>
+<pre>
+<code class="language-python">variable = tipo(input())</code>
+</pre>
+					</div>
+				</div>
+				<p>
+					donde:
+					<ul>
+						<li><strong>input()</strong>: siempre devuelve una cadena (str).</li>
+						<li><strong>tipo</strong>: puede ser int, float, complex, etc.</li>
+					</ul>
+				</p>
+			</div>
+			
+			
+			<div class="card">
+				<h3>💻 Ejemplo: Conversión a int</h3>
+				<div class="snippet">
+					<div class="snippet-bar">
+					  <div class="dots"><span></span><span></span><span></span></div>
+					  <span class="snippet-title">Python</span>
+					  <span class="snippet-tag tag-fn">ejemplo</span>
+					</div>
+					<div class="code-wrap">
+						<div class="line-numbers-col"></div>
+<pre>
+<code class="language-python">a = int(input("Número 1: "))
+b = int(input("Número 2: "))
+print(a + b)</code>
+</pre>
+					</div>
+					
+					<div class="snippet-bar output-bar">
+						<span class="snippet-tag tag-output">salida</span>
+					</div>
+
+					<div class="output-body">
+<pre>
+Número 1: 2
+Número 2: 3
+5
+</pre>
+					</div>
+				</div>	
+			</div>
+			
+			
+			<div class="card">
+				<h3>💻 Ejemplo: Conversión a float</h3>
+				<div class="snippet">
+					<div class="snippet-bar">
+					  <div class="dots"><span></span><span></span><span></span></div>
+					  <span class="snippet-title">Python</span>
+					  <span class="snippet-tag tag-fn">ejemplo</span>
+					</div>
+					<div class="code-wrap">
+						<div class="line-numbers-col"></div>
+<pre>
+<code class="language-python">x = float(input("x: "))
+y = float(input("y: "))
+print(x + y)</code>
+</pre>
+					</div>
+					
+					<div class="snippet-bar output-bar">
+						<span class="snippet-tag tag-output">salida</span>
+					</div>
+
+					<div class="output-body">
+<pre>
+x: 7.3
+y: 2.9
+10.2
+</pre>
+					</div>
+				</div>	
+			</div>
+			
+			
+			<div class="card">
+				<h3>💻 Ejemplo: Conversión a complex</h3>
+				<div class="snippet">
+					<div class="snippet-bar">
+					  <div class="dots"><span></span><span></span><span></span></div>
+					  <span class="snippet-title">Python</span>
+					  <span class="snippet-tag tag-fn">ejemplo</span>
+					</div>
+					<div class="code-wrap">
+						<div class="line-numbers-col"></div>
+<pre>
+<code class="language-python">z1 = complex(input("Complejo 1: "))
+z2 = complex(input("Complejo 2: "))
+print(z1 + z2)</code>
+</pre>
+					</div>
+					
+					<div class="snippet-bar output-bar">
+						<span class="snippet-tag tag-output">salida</span>
+					</div>
+
+					<div class="output-body">
+<pre>
+Complejo 1: 1+2j
+Complejo 2: 3+4j
+(4+6j)
+</pre>
+					</div>
+				</div>	
+			</div>
+			
+			
+			<div class="card">
+				<h3>💻 Ejemplo: Lee múltiples valores del mismo tipo de dato en una línea</h3>
+				<div class="snippet">
+					<div class="snippet-bar">
+					  <div class="dots"><span></span><span></span><span></span></div>
+					  <span class="snippet-title">Python</span>
+					  <span class="snippet-tag tag-fn">ejemplo</span>
+					</div>
+					<div class="code-wrap">
+						<div class="line-numbers-col"></div>
+<pre>
+<code class="language-python"># Entrada: "3 7"
+a, b = map(int, input("Ingresa dos números enteros: ").split())
+# a=3, b=7
+print(a)
+print(b)</code>
+</pre>
+					</div>
+					
+					<div class="snippet-bar output-bar">
+						<span class="snippet-tag tag-output">salida</span>
+					</div>
+
+					<div class="output-body">
+<pre>
+3
+7
+</pre>
+					</div>
+				</div>
+				<p>
+					El método <strong>split()</strong> toma una cadena de texto y la divide en trozos más pequeños usando un separador (por defecto, los espacios en blanco). Toma la cadena "3 7", la divide por el espacio en blanco y obtiene "3" y "7" (siguen siendo texto).
+					<br><br>
+					La función <strong>map()</strong> toma un tipo de dato o función de conversión (en este caso int) y se lo aplica automáticamente a cada uno de los elementos divididos por split(). Convierte "3" y "7" a enteros 3 y 7.
+					<br><br>
+					Al combinar <strong>split()</strong>, <strong>map()</strong> y desempaquetado de variables, puedes leer múltiples variables convertidas en una sola línea. Finalmente tenemos: a = 3 y b = 7.
+					
+				</p>	
+			</div>
+			
+			
+			<div class="card">
+				<h3>💻 Ejemplo: Lee múltiples valores de diferente tipo de dato en una línea</h3>
+				<div class="snippet">
+					<div class="snippet-bar">
+					  <div class="dots"><span></span><span></span><span></span></div>
+					  <span class="snippet-title">Python</span>
+					  <span class="snippet-tag tag-fn">ejemplo</span>
+					</div>
+					<div class="code-wrap">
+						<div class="line-numbers-col"></div>
+<pre>
+<code class="language-python"># Entrada: "Ana 25 1.78"
+nombre, edad, altura = input().split()
+# nombre no es necesario convertirlo
+edad = int(edad)
+altura = float(altura)</code>
+</pre>
+					</div>
+					
+					<div class="snippet-bar output-bar">
+						<span class="snippet-tag tag-output">salida</span>
+					</div>
+
+					<div class="output-body">
+<pre>
+
+</pre>
+					</div>
+				</div>	
+			</div>
+			
+	
+			<div class="nav-buttons"><button class="nav-arrow-btn" onclick="goToSection(3)">← Anterior</button><button class="nav-arrow-btn" onclick="goToSection(5)">Siguiente: Salida de Datos →</button></div>
+		</div>
+		
+		<!-- =========================================================================================== -->
+		<!-- ===================================== SALIDA DE DATOS ===================================== -->
+		<!-- =========================================================================================== -->
+		<div class="section" id="section-5">		
+			<div class="section-header">
+				<div class="section-icon icon-green">📤</div>
+				<div class="section-header-text">
+					<h2>La función <span class="highlight">print()</span></h2>					
+					<p>Envía información a la consola</p>
+				</div>
+			</div>
+			
+			
+			<div class="card">
+				<p>				
+					<span class="highlight">print()</span> s la función que se usa para mostrar información en la pantalla (salida estándar). Es una de las funciones más usadas para ver resultados, mensajes o depurar código..
+				</p>
+			</div>
+			
+			
+			<div class="card">
+				<h3>📖 Sintaxis:</h3>
+				<div class="snippet">
+					<div class="snippet-bar">
+					  <div class="dots"><span></span><span></span><span></span></div>
+					  <span class="snippet-title">Python</span>
+					  <span class="snippet-tag tag-fn">sintaxis</span>
+					</div>
+					<div class="code-wrap">
+						<div class="line-numbers-col"></div>
+<pre>
+<code class="language-python">print(objeto1, objeto2, ..., objeto_n, sep=' ', end='\n', file=sys.stdout, flush=False)</code>
+</pre>
+					</div>
+				</div>
+				<p>
+					donde:
+					<ul>
+						<li><strong>objeto1, objeto2, ..., objeto_n</strong>: uno o más valores a mostrar (pueden ser strings, números, variables, expresiones, etc.). Se separan por comas.</li>
+						<li><strong>sep</strong>: el separador entre los objetos (por defecto es un espacio ' ').</li>
+						<li><strong>end</strong>: lo qué se agrega al final (por defecto es un salto de línea '\n').</li>
+						<li><strong>file</strong>: a dónde se envía la salida (por defecto la consola).</li>
+						<li><strong>flush</strong>: si se fuerza a vaciar el buffer inmediatamente (por defecto False).</li>
+					</ul>
+				</p>
+			</div>
+			
+			
+			<div class="card">
+				<h3>💻 Ejemplo:</h3>
+				<div class="snippet">
+					<div class="snippet-bar">
+					  <div class="dots"><span></span><span></span><span></span></div>
+					  <span class="snippet-title">Python</span>
+					  <span class="snippet-tag tag-fn">ejemplo</span>
+					</div>
+					<div class="code-wrap">
+						<div class="line-numbers-col"></div>
+<pre>
+<code class="language-python"># Datos que quieres mostrar
+print("Hola")						# Hola
+print(10)							# 10
+print("Edad:", 20)					# 20
+# Múltiples objetos
+nombre = "Ana"
+edad = 20
+print(nombre, edad)					# Ana 20
+# sep
+print("A", "B", "C")				# A B C
+print("A", "B", "C", sep="-")		# A-B-C
+print(1, 2, 3, sep=" | ")			# 1 | 2 | 3
+# end
+print("Hola", end="")				
+print("Mundo")						# HolaMundo
+# file
+archivo = open("salida.txt", "w")	
+print("Hola", file=archivo)
+archivo.close()
+# flush
+print("Cargando...", flush=True)	# Cargando...</code>
+</pre>
+					</div>
+					
+					<div class="snippet-bar output-bar">
+						<span class="snippet-tag tag-output">salida</span>
+					</div>
+
+					<div class="output-body">
+<pre>
+Hola
+10
+Edad: 20
+Ana 20
+A B C
+A-B-C
+1 | 2 | 3
+HolaMundo
+Cargando...
+</pre>
+					</div>
+				</div>	
+			</div>
+			
+			
+			<div class="card">
+				<h3>📖 Formateo de cadenas antes de Python 3.6</h3>
+				<p>
+					En las versiones de <span class="highlight">Python</span> anteriores a la version 3.6, se utilizaban principalmente tres formas para insertar valores dentro de cadenas de texto: la concatenación con <code>+</code>, el operador <code>%</code> y el método <code>.format()</code>.
+					<br><br>
+					La concatenación fue la forma más básica y sencilla. Consistía en unir cadenas manualmente, aunque tenía la desventaja de requerir conversiones explícitas con <code>str()</code> cuando se trabajaba con números u otros tipos de datos.
+					<br><br>
+					Posteriormente se popularizó el operador <code>%</code> (Python 1) , heredado del estilo de lenguaje C. Permitía insertar valores mediante especificadores de formato y durante muchos años fue el método más utilizado en Python clásico.
+					<br><br>
+					Más adelante apareció el método <code>.format()</code> (Python 2.6) , diseñado para ofrecer una sintaxis más flexible y legible que <code>%</code>. Este método permitió controlar posiciones, nombres y formatos de salida de manera más cómoda, convirtiéndose 
+					en el estándar antes de la llegada de las f-strings.
+					<br><br>
+					Actualmente, las <strong>f-strings</strong> son la opción recomendada porque hacen el código más claro, más fácil de 
+					escribir y generalmente más eficiente.
+				</p>
+			</div>		
+			
+			
+			
+			<div class="card">
+				<h3>📖 f-strings (Python 3.6+)</h3>
+				<p>
+					Las f-strings (formatted string literals) son una forma moderna de insertar valores y expresiones dentro de cadenas en Python. Fueron introducidas en Python 3.6 y actualmente son el método recomendado para formatear texto.
+					<br><br>
+					La idea principal es colocar una f antes de las comillas de la cadena. Después, cualquier expresión escrita entre llaves {} será evaluada e insertada automáticamente dentro del texto.
+				</p>
+			</div>
+			
+			
+			<div class="card">
+				<h3>📖 Sintaxis:</h3>
+				<div class="snippet">
+					<div class="snippet-bar">
+					  <div class="dots"><span></span><span></span><span></span></div>
+					  <span class="snippet-title">Python</span>
+					  <span class="snippet-tag tag-fn">sintaxis</span>
+					</div>
+					<div class="code-wrap">
+						<div class="line-numbers-col"></div>
+<pre>
+<code class="language-python">f"texto {expresion} texto"
+o
+f'texto {expresion} texto'</code>
+</pre>
+					</div>
+				</div>
+			</div>
+			
+			
+			<div class="card">
+				<h3>💻 Ejemplo:</h3>
+				<div class="snippet">
+					<div class="snippet-bar">
+					  <div class="dots"><span></span><span></span><span></span></div>
+					  <span class="snippet-title">Python</span>
+					  <span class="snippet-tag tag-fn">ejemplo</span>
+					</div>
+					<div class="code-wrap">
+						<div class="line-numbers-col"></div>
+<pre>
+<code class="language-python">nombre = "Ana"
+edad = 25
+print(f"Me llamo {nombre} y tengo {edad} años")</code>
+</pre>
+					</div>
+					
+					<div class="snippet-bar output-bar">
+						<span class="snippet-tag tag-output">salida</span>
+					</div>
+
+					<div class="output-body">
+<pre>
+Me llamo Ana y tengo 25 años
+</pre>
+					</div>
+				</div>	
+			</div>
+			
+			
+			<div class="card">
+				<p>
+					Los <code>{}</code> pueden contener <strong>cualquier expresión válida en Python</strong>, como variables, operaciones, funciones y especificadores de formato.
+				</p>
+			</div>
+			
+			
+			<div class="card">
+				<h3>💻 Ejemplo:</h3>
+				<div class="snippet">
+					<div class="snippet-bar">
+					  <div class="dots"><span></span><span></span><span></span></div>
+					  <span class="snippet-title">Python</span>
+					  <span class="snippet-tag tag-fn">ejemplo</span>
+					</div>
+					<div class="code-wrap">
+						<div class="line-numbers-col"></div>
+<pre>
+<code class="language-python"># Variables y operaciones
+x = 5
+y = 7
+print(f"La suma de {x} y {y} es {x + y}")
+
+# Funciones
+usuario = "ana lópez"
+print(f"Hola, {usuario.upper()}")
+
+# Concatenar cadenas
+nombre = "Juan"
+apellido = "Pérez"
+texto = f"Nombre: {nombre}, " + f"Apellido: {apellido}"
+print(texto)</code>
+</pre>
+					</div>
+					
+					<div class="snippet-bar output-bar">
+						<span class="snippet-tag tag-output">salida</span>
+					</div>
+
+					<div class="output-body">
+<pre>
+La suma de 5 y 7 es 12
+Ana López
+Nombre: Juan, Apellido: Pérez
+</pre>
+					</div>
+				</div>	
+			</div>
+			
+			
+			<div class="card">
+				<h3>💻 Ejemplo: Combinar cadenas adyacentes</h3>
+				<div class="snippet">
+					<div class="snippet-bar">
+					  <div class="dots"><span></span><span></span><span></span></div>
+					  <span class="snippet-title">Python</span>
+					  <span class="snippet-tag tag-fn">ejemplo</span>
+					</div>
+					<div class="code-wrap">
+						<div class="line-numbers-col"></div>
+<pre>
+<code class="language-python">nombre = "Ana"
+edad = 30
+ciudad = "CDMX"
+info = (
+	f"Nombre: {nombre}, "
+	f"Edad: {edad} años, "
+	f"Ciudad: {ciudad}"
+)
+print(info)</code>
+</pre>
+					</div>
+					
+					<div class="snippet-bar output-bar">
+						<span class="snippet-tag tag-output">salida</span>
+					</div>
+
+					<div class="output-body">
+<pre>
+Nombre: Ana, Edad: 30 años, Ciudad: CDMX
+</pre>
+					</div>
+				</div>	
+			</div>
+			
+			
+			<div class="card">
+				<h3>💻 Ejemplo: Cadenas multilínea</h3>
+				<div class="snippet">
+					<div class="snippet-bar">
+					  <div class="dots"><span></span><span></span><span></span></div>
+					  <span class="snippet-title">Python</span>
+					  <span class="snippet-tag tag-fn">ejemplo</span>
+					</div>
+					<div class="code-wrap">
+						<div class="line-numbers-col"></div>
+<pre>
+<code class="language-python">nombre = "Ana"
+edad = 30
+ciudad = "CDMX"
+# Con triple comilla doble
+mensaje = f"""
+Nombre : {nombre}
+Edad   : {edad} años
+Ciudad : {ciudad}
+"""
+print(mensaje)</code>
+</pre>
+					</div>
+					
+					<div class="snippet-bar output-bar">
+						<span class="snippet-tag tag-output">salida</span>
+					</div>
+
+					<div class="output-body">
+<pre>
+Nombre : Ana
+Edad : 30 años
+Ciudad : CDMX
+</pre>
+					</div>
+				</div>	
+			</div>
+			
+			
+			<div class="tip-box">
+				<div class="tip-title">💡 Tip:</div>
+				<p>
+					La principal ventaja frente a usar <strong>cadenas multilínea</strong> es que no necesitas \n para los saltos de línea y puedes mezclar comillas simples y dobles libremente dentro del texto sin escapar nada.
+					<br>
+					Son especialmente útiles para generar mensajes largos, reportes o bloques de texto formateado.
+				</p>
+			</div>
+					
+			
+			<div class="nav-buttons"><button class="nav-arrow-btn" onclick="goToSection(4)">← Anterior</button><button class="nav-arrow-btn" onclick="goToSection(6)">Siguiente: Especificadores de Formato - f-strings →</button></div>
+		</div>
+		
+		<!-- ======================================================================================= -->
+		<!-- ===================================== F - STRINGS ===================================== -->
+		<!-- ======================================================================================= -->
+		<div class="section" id="section-6">		
+			<div class="section-header">
+				<div class="section-icon icon-blue">🏷️</div>
+				<div class="section-header-text">
+					<h2>f-strings: Específicadores de Formato</h2>
+					<p>Controla el ancho, alineación, precisión y tipo de los valores al mostrarlos con f-strings</p>
+				</div>
+			</div>
+			
+			
+			<div class="card">
+				<h3>📖 Especificadores de formato</h3>
+				<p>
+					Dentro de los <code>{}</code> puedes usar <strong><code>:</code></strong> seguido de un <strong>especificador de formato</strong> 
+					para controlar cómo se muestra el valor. La sintaxis es:
+				</p>
+			</div>
+			
+			
+			<div class="card">
+				<h3>📖 Sintaxis:</h3>
+				<div class="snippet">
+					<div class="snippet-bar">
+					  <div class="dots"><span></span><span></span><span></span></div>
+					  <span class="snippet-title">Python</span>
+					  <span class="snippet-tag tag-fn">sintaxis</span>
+					</div>
+					<div class="code-wrap">
+						<div class="line-numbers-col"></div>
+<pre>
+<code class="language-python">f"{expresión : especificador}"</code>
+</pre>
+					</div>
+				</div>
+			</div>
+			
+			
+			<div class="card">
+				<p>
+					Una expresión puede contener los siguientes especificadores de formato:
+				</p>
+			</div>
+			
+			
+			<div class="card">
+				<h3>📖 Sintaxis:</h3>
+				<div class="snippet">
+					<div class="snippet-bar">
+					  <div class="dots"><span></span><span></span><span></span></div>
+					  <span class="snippet-title">Python</span>
+					  <span class="snippet-tag tag-fn">sintaxis</span>
+					</div>
+					<div class="code-wrap">
+						<div class="line-numbers-col"></div>
+<pre>
+<code class="language-python">{expresión : [relleno][alineación][signo][ancho][.precisión][tipo]}</code>
+</pre>
+					</div>
+				</div>
+			</div>
+			
+			
+			<div class="card">
+				<h3>💻 Ejemplo: Relleno, alineación y ancho</h3>
+				<div class="snippet">
+					<div class="snippet-bar">
+					  <div class="dots"><span></span><span></span><span></span></div>
+					  <span class="snippet-title">Python</span>
+					  <span class="snippet-tag tag-fn">ejemplo</span>
+					</div>
+					<div class="code-wrap">
+						<div class="line-numbers-col"></div>
+<pre>
+<code class="language-python">n = 42
+print(f"{n:10}")     # '        42'  → derecha (default)
+print(f"{n:<10}")    # '42        '  → izquierda
+print(f"{n:^10}")    # '    42    '  → centrado
+print(f"{n:*^10}")   # '****42****'  → centrado con relleno '*'
+print(f"{n:0>10}")   # '0000000042'  → derecha con relleno '0'
+
+pi = 3.14159
+print(f"{pi:10}")      # '   3.14159'   → derecha (default)
+print(f"{pi:<10}")     # '3.14159   '  → izquierda
+print(f"{pi:^10}")     # ' 3.14159  '  → centrado
+print(f"{pi:*^10}")    # '*3.14159**'  → centrado con relleno '*'
+print(f"{pi:0^10.2f}") # '00003.1400'  → centrado, 2 decimales, relleno '0'
+
+nombre = "Ana"
+print(f"{nombre:<10}")   # 'Ana       '  → alineado a la izquierda (default)
+print(f"{nombre:>10}")   # '       Ana'  → alineado a la derecha
+print(f"{nombre:^10}")   # '   Ana    '  → centrado
+print(f"{nombre:*^10}")  # '***Ana****'  → centrado con relleno de '*'
+
+b = True
+print(f"{b:10}")     # '         1'  → derecha (default, como entero)
+print(f"{b:<10}")    # '1         '  → izquierda
+print(f"{b:*^10}")   # '****1*****'  → centrado con relleno '*'
+
+c = 3+4j
+print(f"{c:20}")     # '              (3+4j)'  → derecha (default)
+print(f"{c:<20}")    # '(3+4j)              '  → izquierda
+print(f"{c:^20}")    # '       (3+4j)       '  → centrado
+print(f"{c:*^20}")   # '*******(3+4j)*******'  → centrado con relleno '*'
+print(f"{c:->20}")   # '--------------(3+4j)'  → derecha con relleno '-'</code>
+</pre>
+					</div>
+					
+					<div class="snippet-bar output-bar">
+						<span class="snippet-tag tag-output">salida</span>
+					</div>
+
+					<div class="output-body">
+<pre>
+        42
+42        
+    42    
+****42****
+0000000042
+   3.14159
+3.14159   
+ 3.14159  
+*3.14159**
+0003.14000
+Ana       
+       Ana
+   Ana    
+***Ana****
+         1
+1         
+****1*****
+              (3+4j)
+(3+4j)              
+       (3+4j)       
+*******(3+4j)*******
+--------------(3+4j)
+</pre>
+					</div>
+				</div>	
+			</div>
+			
+			
+			<div class="card">
+				<h3>💻 Ejemplo: Números enteros</h3>
+				<div class="snippet">
+					<div class="snippet-bar">
+					  <div class="dots"><span></span><span></span><span></span></div>
+					  <span class="snippet-title">Python</span>
+					  <span class="snippet-tag tag-fn">ejemplo</span>
+					</div>
+					<div class="code-wrap">
+						<div class="line-numbers-col"></div>
+<pre>
+<code class="language-python">n = 255
+print(f"{n:d}")    # '255'            → decimal (default)
+print(f"{n:b}")    # '11111111'       → binario
+print(f"{n:#b}")   # '0b11111111'     → binario con prefijo
+print(f"{n:o}")    # '377'            → octal
+print(f"{n:x}")    # 'ff'             → hexadecimal (minúsculas)
+print(f"{n:X}")    # 'FF'             → hexadecimal (mayúsculas)
+print(f"{n:#x}")   # '0xff'           → hex con prefijo
+print(f"{n:08b}")  # '11111111'       → binario con ancho 8 y relleno de ceros
+print(f"{n:012b}") # '000011111111'   → binario con ancho 12 y relleno de ceros</code>
+</pre>
+					</div>
+					
+					<div class="snippet-bar output-bar">
+						<span class="snippet-tag tag-output">salida</span>
+					</div>
+
+					<div class="output-body">
+<pre>
+255
+11111111
+0b11111111
+377
+ff
+FF
+0xff
+11111111
+000011111111
+</pre>
+					</div>
+				</div>	
+			</div>			
+			
+			
+			<div class="card">
+				<h3>💻 Ejemplo: Números reales</h3>
+				<div class="snippet">
+					<div class="snippet-bar">
+					  <div class="dots"><span></span><span></span><span></span></div>
+					  <span class="snippet-title">Python</span>
+					  <span class="snippet-tag tag-fn">ejemplo</span>
+					</div>
+					<div class="code-wrap">
+						<div class="line-numbers-col"></div>
+<pre>
+<code class="language-python">pi = 3.14159265
+print(f"{pi:.2f}")   # '3.14'         → 2 decimales fijos
+print(f"{pi:.5f}")   # '3.14159'      → 5 decimales fijos
+print(f"{pi:10.3f}") # '     3.142'   → ancho 10, 3 decimales
+print(f"{pi:e}")     # '3.141593e+00' → notación científica (minúsculas)
+print(f"{pi:E}")     # '3.141593E+00' → notación científica (mayúsculas)
+print(f"{pi:.2e}")   # '3.14e+00'     → científica con 2 decimales
+print(f"{pi:g}")     # '3.14159'      → formato general</code>
+</pre>
+					</div>
+					
+					<div class="snippet-bar output-bar">
+						<span class="snippet-tag tag-output">salida</span>
+					</div>
+
+					<div class="output-body">
+<pre>
+3.14
+3.14159
+     3.142
+3.141593e+00
+3.141593E+00
+3.14e+00
+3.14159
+</pre>
+					</div>
+				</div>	
+			</div>
+			
+			
+			<div class="card">
+				<h3>💻 Ejemplo: Separador de miles</h3>
+				<div class="snippet">
+					<div class="snippet-bar">
+					  <div class="dots"><span></span><span></span><span></span></div>
+					  <span class="snippet-title">Python</span>
+					  <span class="snippet-tag tag-fn">ejemplo</span>
+					</div>
+					<div class="code-wrap">
+						<div class="line-numbers-col"></div>
+<pre>
+<code class="language-python">millon = 1000000
+print(f"{millon:,}")     # '1,000,000'     → coma como separador
+print(f"{millon:_}")     # '1_000_000'     → guion bajo como separador
+print(f"{millon:,.2f}")  # '1,000,000.00'  → separador y 2 decimales</code>
+</pre>
+					</div>
+					
+					<div class="snippet-bar output-bar">
+						<span class="snippet-tag tag-output">salida</span>
+					</div>
+
+					<div class="output-body">
+<pre>
+1,000,000
+1_000_000
+1,000,000.00
+</pre>
+					</div>
+				</div>	
+			</div>
+			
+			
+			<div class="card">
+				<h3>💻 Ejemplo: Signo</h3>
+				<div class="snippet">
+					<div class="snippet-bar">
+					  <div class="dots"><span></span><span></span><span></span></div>
+					  <span class="snippet-title">Python</span>
+					  <span class="snippet-tag tag-fn">ejemplo</span>
+					</div>
+					<div class="code-wrap">
+						<div class="line-numbers-col"></div>
+<pre>
+<code class="language-python">x = 42
+print(f"{x:+}")   # '+42'  → muestra siempre el signo
+print(f"{x: }")   # ' 42'  → espacio en positivos (alinea con negativos)
+print(f"{-x:-}")  # '-42'  → solo muestra el signo negativo (default)</code>
+</pre>
+					</div>
+					
+					<div class="snippet-bar output-bar">
+						<span class="snippet-tag tag-output">salida</span>
+					</div>
+
+					<div class="output-body">
+<pre>
++42
+ 42
+-42
+</pre>
+					</div>
+				</div>	
+			</div>
+			
+			
+			<div class="card">
+				<h3>💻 Ejemplo: Porcentaje</h3>
+				<div class="snippet">
+					<div class="snippet-bar">
+					  <div class="dots"><span></span><span></span><span></span></div>
+					  <span class="snippet-title">Python</span>
+					  <span class="snippet-tag tag-fn">ejemplo</span>
+					</div>
+					<div class="code-wrap">
+						<div class="line-numbers-col"></div>
+<pre>
+<code class="language-python">tasa = 0.1234
+print(f"{tasa:.1%}")  # '12.3%'   → multiplica por 100 y agrega '%'
+print(f"{tasa:.2%}")  # '12.34%'  → porcentaje con 2 decimales</code>
+</pre>
+					</div>
+					
+					<div class="snippet-bar output-bar">
+						<span class="snippet-tag tag-output">salida</span>
+					</div>
+
+					<div class="output-body">
+<pre>
+12.3%
+12.34%
+</pre>
+					</div>
+				</div>	
+			</div>
+			
+			
+			<div class="card">
+				<h3>💻 Ejemplo: Llaver literales</h3>
+				<p>
+					Para imprimir { o } reales, se duplican:
+				</p>
+				<div class="snippet">
+					<div class="snippet-bar">
+					  <div class="dots"><span></span><span></span><span></span></div>
+					  <span class="snippet-title">Python</span>
+					  <span class="snippet-tag tag-fn">ejemplo</span>
+					</div>
+					<div class="code-wrap">
+						<div class="line-numbers-col"></div>
+<pre>
+<code class="language-python">print(f"En Python los f-strings usan {{llaves}}")</code>
+</pre>
+					</div>
+					
+					<div class="snippet-bar output-bar">
+						<span class="snippet-tag tag-output">salida</span>
+					</div>
+
+					<div class="output-body">
+<pre>
+En Python los f-strings usan {llaves}
+</pre>
+					</div>
+				</div>	
+			</div>
+			
+			
+			<div class="card">
+				<h3>💻 Ejemplo: Comillas literales</h3>
+				<p>
+					Para imprimir " o ', utiliza una de las siguientes formas:
+				</p>
+				<ul>
+					<li><strong>Alternar comillas (simple/doble):</strong> Si encierras el texto en comillas simples, puedes usar dobles dentro, y viceversa.</li>
+				</ul>
+				<div class="snippet">
+					<div class="snippet-bar">
+					  <div class="dots"><span></span><span></span><span></span></div>
+					  <span class="snippet-title">Python</span>
+					  <span class="snippet-tag tag-fn">ejemplo</span>
+					</div>
+					<div class="code-wrap">
+						<div class="line-numbers-col"></div>
+<pre>
+<code class="language-python"># Si usas comillas simples, coloca comillas dobles dentro de ella para imprimirlas
+print('"Python"')
+# Si usas comillas dobles, coloca comillas simples dentro de ella para imprimirlas
+print("'Python'")</code>
+</pre>
+					</div>
+					
+					<div class="snippet-bar output-bar">
+						<span class="snippet-tag tag-output">salida</span>
+					</div>
+
+					<div class="output-body">
+<pre>
+"Python"
+'Python'
+</pre>
+					</div>
+				</div>
+				<ul>
+					<li><strong>Usar el carácter de escape \:</strong> Antepone una barra invertida para indicarle a Python que la comilla es parte del texto y no el cierre de la cadena.</li>
+				</ul>
+				<div class="snippet">
+					<div class="snippet-bar">
+					  <div class="dots"><span></span><span></span><span></span></div>
+					  <span class="snippet-title">Python</span>
+					  <span class="snippet-tag tag-fn">ejemplo</span>
+					</div>
+					<div class="code-wrap">
+						<div class="line-numbers-col"></div>
+<pre>
+<code class="language-python"># Dentro de comillas dobles, usa el carácter \ para imprimir comillas dobles
+print("\"Python\"")
+# Dentro de comillas simples, usa el carácter \ para imprimir comillas simples
+print('\'Python\'')</code>
+</pre>
+					</div>
+					
+					<div class="snippet-bar output-bar">
+						<span class="snippet-tag tag-output">salida</span>
+					</div>
+
+					<div class="output-body">
+<pre>
+"Python"
+'Python'
+</pre>
+					</div>
+				</div>
+				<ul>
+					<li><strong>Comillas triples:</strong> Útil para textos largos que contienen ambos tipos de comillas.</li>
+				</ul>
+				<div class="snippet">
+					<div class="snippet-bar">
+					  <div class="dots"><span></span><span></span><span></span></div>
+					  <span class="snippet-title">Python</span>
+					  <span class="snippet-tag tag-fn">ejemplo</span>
+					</div>
+					<div class="code-wrap">
+						<div class="line-numbers-col"></div>
+<pre>
+<code class="language-python"># Usa comillas triples para imprimir comillas simples o dobles
+print("""Él dijo: 'Hola', y ella respondió: "Adiós".""")
+print('''Él dijo: 'Hola', y ella respondió: "Adiós".''')</code>
+</pre>
+					</div>
+					
+					<div class="snippet-bar output-bar">
+						<span class="snippet-tag tag-output">salida</span>
+					</div>
+
+					<div class="output-body">
+<pre>
+Él dijo: 'Hola', y ella respondió: "Adiós".
+Él dijo: 'Hola', y ella respondió: "Adiós".
+</pre>
+					</div>
+				</div>	
+			</div>
+			
+			
+			<div class="card">
+				<h3>🏷️ Especificadores dinámicos</h3>
+				<p>
+					Cualquier especificador de formato puede ser dinámico. Sin embargo en la práctica el uso dinámico se limita casi 
+					siempre al ancho y la precisión, por dos razones:
+					<ul>
+						<li style="text-align: justify;">
+							Son los únicos que cambian frecuentemente en tiempo de ejecución, por ejemplo al formatear columnas de una 
+							tabla cuyo ancho depende de los datos.
+						</li>
+						<li style="text-align: justify;">
+							Hacer dinámico el tipo o el relleno es poco común y reduce la legibilidad del código, por lo que si el tipo 
+							cambia, generalmente es más claro usar un <code>if</code> en lugar de un especificador dinámico.
+						</li>
+					</ul>
+				</p>
+			</div>
+			
+			
+			<div class="card">
+				<h3>💻 Ejemplo:</h3>
+				<div class="snippet">
+					<div class="snippet-bar">
+					  <div class="dots"><span></span><span></span><span></span></div>
+					  <span class="snippet-title">Python</span>
+					  <span class="snippet-tag tag-fn">ejemplo</span>
+					</div>
+					<div class="code-wrap">
+						<div class="line-numbers-col"></div>
+<pre>
+<code class="language-python">pi = 3.14159
+ancho = 10
+decimales = 3
+
+print(f"{pi:{ancho}.{decimales}f}")</code>
+</pre>
+					</div>
+					
+					<div class="snippet-bar output-bar">
+						<span class="snippet-tag tag-output">salida</span>
+					</div>
+
+					<div class="output-body">
+<pre>
+     3.142
+</pre>
+					</div>
+				</div>	
+			</div>
+			
+			
+			<div class="nav-buttons"><button class="nav-arrow-btn" onclick="goToSection(5)">← Anterior</button><button class="nav-arrow-btn" onclick="goToSection(6)">Siguiente: Type Hints  →</button></div>
+		
+		</div>
+		
+		<!-- ====================================================================================== -->
+		<!-- ===================================== TYPE HINTS ===================================== -->
+		<!-- ====================================================================================== -->
+		<div class="section" id="section-7">		
+			<div class="section-header">
+				<div class="section-icon icon-blue">🛡️️</div>
+				<div class="section-header-text">
+					<h2>Type Hints</h2>
+					<p>Anotaciones especiales</p>
+				</div>
+			</div>
+		
+			
+			<div class="card">
+				<p>
+					En Python, <strong>una sugerencia de tipo (type hint)</strong> es una construcción sintáctica que permite indicar los tipos de datos esperados de las variables , los argumentos de las funciones y los valores de retorno. Proporcionan una forma de mejorar la mantenibilidad del código al declarar explícitamente el tipo de datos de las variables, los argumentos y los valores de retorno. Sintácticamente, las sugerencias de tipo son una forma de anotación.
+				</p>
+				<p>
+					Python no impone sugerencias de tipo en tiempo de ejecución , pero los verificadores de tipos estáticos , como mypy , pueden usarlas para detectar posibles errores de tipo en tu código antes de ejecutarlo.
+				</p>
+				<p>
+					Al usar sugerencias de tipo, también creas código autodocumentado, lo que facilita que tanto tú como otros comprendan cómo usar correctamente las funciones y las clases.
+				</p>
+			</div>			
+			
+			<div class="card">
+				<h3>📖 Sintaxis:</h3>
+				<div class="snippet">
+					<div class="snippet-bar">
+					  <div class="dots"><span></span><span></span><span></span></div>
+					  <span class="snippet-title">Python</span>
+					  <span class="snippet-tag tag-fn">sintaxis</span>
+					</div>
+					<div class="code-wrap">
+						<div class="line-numbers-col"></div>
+<pre>
+<code class="language-python">nombre_variable: Tipo = valor</code>
+</pre>
+					</div>
+				</div>
+			</div>
+			
+			
+			<div class="card">
+				<h3>💻 Ejemplo:</h3>
+				<div class="snippet">
+					<div class="snippet-bar">
+					  <div class="dots"><span></span><span></span><span></span></div>
+					  <span class="snippet-title">Python</span>
+					  <span class="snippet-tag tag-fn">ejemplo</span>
+					</div>
+					<div class="code-wrap">
+						<div class="line-numbers-col"></div>
+<pre>
+<code class="language-python">edad: int = 25
+nombre: str = "Ana"
+promedio: float = 8.5
+activo: bool = True
+
+# También puedes anotar la variable sin asignarle un valor todavía:
+estatura: float
+estatura = 1.65</code>
+</pre>
+					</div>
+				</div>	
+			</div>
+			
+			
+			<div class="tip-box">
+				<div class="tip-title">💡 Importante:</div>
+				<p>
+					Python nunca lanza un error en tiempo de ejecución por violar un type hint. Esto funciona sin problema (aunque un verificador de tipos se quejaría):
+				</p>
+				<br>
+				<div class="snippet">
+					<div class="snippet-bar">
+					  <div class="dots"><span></span><span></span><span></span></div>
+					  <span class="snippet-title">Python</span>
+					  <span class="snippet-tag tag-fn">ejemplo</span>
+					</div>
+					<div class="code-wrap">
+						<div class="line-numbers-col"></div>
+<pre>
+<code class="language-python">numero: int
+numero = 1.78
+print(numero)</code>
+</pre>
+					</div>
+					
+					<div class="snippet-bar output-bar">
+						<span class="snippet-tag tag-output">salida</span>
+					</div>
+
+					<div class="output-body">
+<pre>
+1.78
+</pre>
+					</div>
+				</div>	
+			</div>
+		
+
+            <div class="nav-buttons"><button class="nav-arrow-btn" onclick="goToSection(6)">← Anterior</button><button class="nav-arrow-btn" disabled>🏁 Fin del tutorial</button></div>
+        </div>
+    </main>
+	
+	
+
+	<footer class="footer-m365">
+		<div class="footer-content">
+			<div class="footer-top-bar"></div>
+			<p class="footer-m365-title">Curso Fundamentos de Python</p>
+			<p class="footer-m365-label">Módulo Fundamentos de Programación</p>
+			<div class="footer-banner" >
+				<div class="footer-text">
+					<span class="label">Instructor: </span>
+					<div class="footer-logo-space">
+						<img src="imgs/LogoM.png" alt="Logo" style="height: 44px;"><span class="name">anuel</span>
+					</div>
+					<div class="footer-logo-space">
+						<img src="imgs/LogoA.png" alt="Logo" style="height: 40px;"><span class="name">lejandro</span>
+					</div>
+					<div class="footer-logo-space">
+						<img src="imgs/LogoL.png" alt="Logo"><span class="name">ópez</span>
+					</div>
+					<div class="footer-logo-space">
+						<img src="imgs/LogoZ.png" alt="Logo"><span class="name">epeda</span>
+					</div>
+				</div>
+			</div>
+			<div class="footer-bottom-bar"></div>
+		</div>
+	</footer>
+	
+
+    <script>		
+        let currentSection = 0; const totalSections = 8;
+        function goToSection(index) { if (index < 0 || index >= totalSections) return; document.querySelectorAll('.section').forEach(s => s.classList.remove('active')); const target = document.getElementById('section-' + index); if (target) target.classList.add('active'); currentSection = index; document.querySelectorAll('.nav-btn').forEach((btn, i) => btn.classList.toggle('active', i === index)); updateProgress(); window.scrollTo({ top: 0, behavior: 'smooth' }); document.getElementById('scorePanel').style.display = index === 8 ? 'block' : 'none'; if (index === 9 && typeof _editors !== 'undefined') { setTimeout(() => { Object.values(_editors).forEach(({ cm }) => cm.refresh()); }, 50); } }
+        function updateProgress() { document.getElementById('progressFill').style.width = ((currentSection + 1) / totalSections * 100) + '%'; document.getElementById('progressText').textContent = 'Sección ' + (currentSection + 1) + ' de ' + totalSections; }
+        
+		
+        // ===== SIMULADOR CORREGIDO CON SOPORTE PARA IF/ELIF/ELSE =====
+        function runEditor(num) {
+            const challengeBoxes = document.querySelectorAll('#section-8 .challenge-box');
+            const box = challengeBoxes[num - 1]; if (!box) return;
+            const instructionsDiv = box.querySelector('.editor-instructions');
+            const instructionsText = instructionsDiv ? instructionsDiv.innerText : '';
+            const textarea = document.getElementById('editor-' + num);
+            const fullCode = instructionsText + textarea.value;
+            const output = document.getElementById('output-' + num);
+            try { const result = simulatePython(fullCode); output.className = 'editor-output success'; output.textContent = result || '(Sin salida)'; } catch (e) { output.className = 'editor-output error'; output.textContent = '❌ Error: ' + e.message; }
+        }
+
+        function simulatePython(code) {
+            const lines = code.split('\n');
+            let output = [];
+            let variables = {};
+
+            function getIndent(line) { const m = line.match(/^(\s*)/); return m ? m[1].length : 0; }
+            function isEmpty(line) { const t = line.trim(); return t === '' || t.startsWith('#'); }
+
+            function evaluateCondition(cond) {
+                let expr = cond.trim();
+                for (let vn in variables) {
+                    const re = new RegExp('\\b' + vn.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'g');
+                    const val = variables[vn];
+                    if (typeof val === 'number') expr = expr.replace(re, val);
+                    else if (typeof val === 'string') expr = expr.replace(re, '"' + val.replace(/"/g, '\\"') + '"');
+                }
+                expr = expr.replace(/\band\b/g, '&&').replace(/\bor\b/g, '||').replace(/\bnot\b/g, '!');
+                try { return !!Function('"use strict"; return (' + expr + ')')(); } catch(e) { return false; }
+            }
+
+            function evaluateExpression(expr) {
+                let e = expr.trim();
+                for (let vn in variables) {
+                    const re = new RegExp('\\b' + vn.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'g');
+                    const val = variables[vn];
+                    if (typeof val === 'number') e = e.replace(re, val);
+                    else if (typeof val === 'string') e = e.replace(re, '"' + val.replace(/"/g, '\\"') + '"');
+                }
+                e = e.replace(/\bTrue\b/g, 'true').replace(/\bFalse\b/g, 'false');
+                e = e.replace(/\band\b/g, '&&').replace(/\bor\b/g, '||').replace(/\bnot\b/g, '!');
+                try { return Function('"use strict"; return (' + e + ')')(); } catch(e) { return expr; }
+            }
+
+            function processPrint(content) {
+                if (content.startsWith('f"') || content.startsWith("f'")) {
+                    let str = content.slice(2, -1);
+                    str = str.replace(/\{([^}]+)\}/g, (m, expr) => { try { return evaluateExpression(expr.trim()); } catch(e) { return m; } });
+                    output.push(str);
+                } else {
+                    if ((content.startsWith('"') && content.endsWith('"')) || (content.startsWith("'") && content.endsWith("'"))) output.push(content.slice(1, -1));
+                    else { try { output.push(String(evaluateExpression(content))); } catch(e) { output.push(content); } }
+                }
+            }
+
+            function processAssignment(line) {
+                const m = line.trim().match(/^(\w+)\s*=\s*(.+)$/);
+                if (m) {
+                    const vn = m[1]; let val = m[2].trim();
+                    if (val.startsWith('f"') || val.startsWith("f'")) {
+                        let s = val.slice(2, -1); s = s.replace(/\{([^}]+)\}/g, (mm, ex) => { try { return evaluateExpression(ex.trim()); } catch(e) { return mm; } }); variables[vn] = s;
+                    } else if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) { variables[vn] = val.slice(1, -1); }
+                    else { try { variables[vn] = evaluateExpression(val); } catch(e) { variables[vn] = val; } }
+                    return true;
+                }
+                return false;
+            }
+
+            function skipBlock(start, baseInd) {
+                let i = start;
+                while (i < lines.length) { const l = lines[i]; if (isEmpty(l)) { i++; continue; } if (getIndent(l) <= baseInd) return i; i++; }
+                return i;
+            }
+
+            function processIfChain(start, chainInd) {
+                let i = start;
+                let satisfied = false;
+                while (i < lines.length) {
+                    const line = lines[i]; if (isEmpty(line)) { i++; continue; }
+                    const ind = getIndent(line);
+                    if (ind < chainInd) break;
+                    if (ind > chainInd) { i++; continue; }
+                    const trimmed = line.trim();
+                    const ifM = trimmed.match(/^if\s+(.+):$/);
+                    const elifM = trimmed.match(/^elif\s+(.+):$/);
+                    const elseM = trimmed.match(/^else:$/);
+                    if (!ifM && !elifM && !elseM) break;
+
+                    if (!satisfied) {
+                        if (ifM && evaluateCondition(ifM[1])) { satisfied = true; i = executeBlock(i + 1, chainInd); continue; }
+                        if (elifM && evaluateCondition(elifM[1])) { satisfied = true; i = executeBlock(i + 1, chainInd); continue; }
+                        if (elseM) { satisfied = true; i = executeBlock(i + 1, chainInd); continue; }
+                    }
+                    i = skipBlock(i + 1, chainInd);
+                }
+                return i;
+            }
+
+            function executeBlock(start, baseInd) {
+                let i = start;
+                while (i < lines.length) {
+                    const line = lines[i]; if (isEmpty(line)) { i++; continue; }
+                    const ind = getIndent(line); if (ind <= baseInd) return i;
+                    const trimmed = line.trim();
+                    if (trimmed.match(/^if\s+(.+):$/)) { i = processIfChain(i, ind); continue; }
+                    const pm = trimmed.match(/^print\((.+)\)$/);
+                    if (pm) { processPrint(pm[1]); i++; continue; }
+                    if (processAssignment(trimmed)) { i++; continue; }
+                    i++;
+                }
+                return i;
+            }
+
+            executeBlock(0, -1);
+            return output.join('\n');
+        }
+
+        function toggleSolution(num) { document.getElementById('solution-' + num).classList.toggle('visible'); }
+        document.addEventListener('keydown', function(e) { if (e.target.tagName === 'TEXTAREA') { if (e.key === 'Tab') { e.preventDefault(); const s = e.target.selectionStart; e.target.value = e.target.value.substring(0, s) + '    ' + e.target.value.substring(e.target.selectionEnd); e.target.selectionStart = e.target.selectionEnd = s + 4; } return; } if (e.key === 'ArrowRight' && currentSection < totalSections - 1) goToSection(currentSection + 1); else if (e.key === 'ArrowLeft' && currentSection > 0) goToSection(currentSection - 1); });
+        updateProgress();
+		
+		
+
+
+		
+		
+    </script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+<script>
+  function addLineNumbers() {
+    document.querySelectorAll('.code-wrap').forEach(wrap => {
+      const code = wrap.querySelector('code');
+      const col  = wrap.querySelector('.line-numbers-col');
+      if (!code || !col) return;
+      const lines = code.textContent.split('\n');
+      const count = lines[lines.length - 1].trim() === '' ? lines.length - 1 : lines.length;
+      col.innerHTML = Array.from({ length: count }, (_, i) => `<span>${i + 1}</span>`).join('');
+    });
+  }
+  document.addEventListener('DOMContentLoaded', () => {
+    if (window.Prism) Prism.hooks.add('complete', addLineNumbers);
+    setTimeout(addLineNumbers, 400);
+  });
+</script>
+</body>
+</html>
